@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "What color? (#xxxxxx)"
+read COLOR
+if [[ ! $COLOR =~ ^\#[0-9a-fA-F]{6}$ ]]; then
+  echo "Illegal input"
+  exit 1;
+fi
+echo "What size? (x)"
+read SIZE
+for x in *.xbm; do
+  convert -fill $COLOR -transparent white -opaque black -resize "${SIZE}x${SIZE}" "${x}" "${x%.*}.png";
+done
+exit 0
