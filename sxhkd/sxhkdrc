@@ -1,0 +1,120 @@
+#
+# bspwm hotkeys
+#
+
+# Quit bspwm
+super + shift + Escape
+    pkill -x panel; bspc quit
+
+# Kill window
+super + w
+    bspc window -c
+
+# Next layout
+super + t
+    bspc desktop -l next
+
+# Balance windows
+super + b
+    bspc desktop -B
+
+# Toggle window floating(s)/fullscreen(f)
+super + {s,f}
+    bspc window -t {floating,fullscreen}
+
+# Focus last window/desktop
+super + {grave,Tab}
+    bspc {window,desktop} -f last
+
+# Switch current window with last focused
+super + apostrophe
+    bspc window -s last
+
+# Go to oldest/newest window
+super + {o,i}
+    bspc control --record-history off; \
+    bspc window {older,newer} -f; \
+    bspc control --record-history on
+
+# ???
+super + y
+    bspc window -w last.manual
+
+# Swap current window with the biggest window
+super + m
+    bspc window -s biggest
+
+# Move focus/window to the left/down/up/right
+super + {_,shift + }{h,j,k,l}
+    bspc window -{f,s} {left,down,up,right}
+
+# Focus next/previous window
+super + {_,shift + }n
+    bspc window -f {next,prev}
+
+# Circulate the leaves of the tree
+super + {comma,period}
+    bspc desktop -C {backward,forward}
+
+# Focus prev/next workspace
+super + {a,d}
+    bspc desktop -f {prev,next}
+
+# Preselect splitting area
+super + ctrl + {h,j,k,l}
+    bspc window -p {left,down,up,right}
+
+# Cancel preselect
+super + ctrl + {_,shift + }space
+    bspc {window -p cancel,desktop -c}
+
+# Push split
+super + alt + {h,j,k,l}
+    bspc window -e {left,down,up,right} push
+
+# Pull split
+super + alt + shift + {h,j,k,l}
+    bspc window -e {right,up,down,left} pull
+
+# Set splitting ratio of current window
+super + ctrl + {1-9}
+    bspc window -r 0.{1-9}
+
+# Focus workspace/move window to workspace
+super + {_,shift + }{1-9,0}
+    bspc {desktop -f,window -d} \^{1-9,10}
+
+~button1
+    bspc pointer -g focus
+
+super + button{1-3}
+    bspc pointer -g {move,resize_side,resize_corner}
+
+super + !button{1-3}
+    bspc pointer -t %i %i
+
+super + @button{1-3}
+    bspc pointer -u
+
+#
+# wm independent hotkeys
+#
+
+super + Return
+    urxvt
+
+super + r
+    dmenu_run -l 5
+
+XF86AudioRaiseVolume
+    /usr/bin/vol_up
+
+XF86AudioLowerVolume
+    /usr/bin/vol_down
+
+XF86AudioMute
+    /usr/bin/mute_toggle
+
+# make sxhkd reload its configuration files:
+super + Escape
+    pkill -USR1 -x sxhkd
