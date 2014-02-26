@@ -1,0 +1,40 @@
+! terminal colors
+#include "/home/glindste/.xthemes/solarized"
+
+! Xcursor
+Xcursor.theme: Vanilla-DMZ-AA
+
+! URxvt
+!Transparency
+URxvt*depth: 32
+URxvt*background: rgba:2d00/2d00/2d00/ffff
+
+! Remove ugly scrollbar (who needs it anyway?)
+URxvt*scrollBar: false
+
+! URxvt font
+! Check in /usr/share/fonts/fonts.dir for font names such as this V
+! nice proggy font: -*-proggytinysz-medium-*-*-*-*-*-*-*-*-*-iso8859-*
+! ubuntu mono font: xft:Ubuntu Mono:pixelsize=11
+! envy code r:      xft:envy code r:pixelsize=11
+URxvt*font: xft:envy code r:pixelsize=10
+
+! when app sends bell to terminal, awesome highlights the appropriate tag
+URxvt*urgentOnBell: true
+
+! Click on link to open in browser support
+URxvt*perl-ext-common: default,matcher,remote-clipboard
+URxvt*url-launcher: firefox
+URxvt*matcher.button: 1
+! URL Color
+URxvt*colorUL: #4682B4
+! copy to clipboard on selection
+!URxvt*perl-ext-common: default,matcher,remote-clipboard
+
+! ibus input
+URxvt.inputMethod: ibus
+URxvt.preeditType: OverTheSpot
+
+! Xterm font
+*faceName: Ubuntu Mono
+XTerm*faceSize: 8
