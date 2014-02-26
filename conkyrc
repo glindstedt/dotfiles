@@ -1,0 +1,111 @@
+# Conky, a system monitor, based on torsmo
+#
+# Any original torsmo code is licensed under the BSD license
+#
+# All code written since the fork of torsmo is licensed under the GPL
+#
+# Please see COPYING for details
+#
+# Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
+# Copyright (c) 2005-2010 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
+# All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+## General settings
+background no
+no_buffers yes
+out_to_console no
+out_to_stderr no
+# extra_newline: useful for writing to awesomes wiboxes
+extra_newline no
+update_interval 1.0
+# sample rates
+cpu_avg_samples 2
+net_avg_samples 2
+diskio_avg_samples 2
+
+## Window
+own_window yes
+own_window_class Conky
+own_window_type desktop
+# Note: sticky makes concky appear on all workspaces
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+# transparency
+own_window_argb_visual yes
+own_window_transparent yes
+
+
+## Layout
+alignment top_right
+gap_x 5
+gap_y 20
+minimum_size 5 5
+use_spacer none
+border_width 1
+
+## Text
+override_utf8_locale yes
+uppercase no
+use_xft yes
+#xftfont ency code r:size=8
+xftfont DejaVu Sans Mono:size=8
+
+## Graphics
+# double_buffer: removes flickering
+double_buffer yes
+draw_borders no
+draw_graph_borders yes
+draw_outline no
+draw_shades no
+stippled_borders 0
+show_graph_scale no
+show_graph_range no
+
+## Colors
+default_color grey
+default_outline_color white
+default_shade_color white
+
+color1 white
+
+lua_load /home/glindste/short.lua
+#imap gmail.com gustaflindstedt * -i 120 -p 993
+
+TEXT
+#${lua conky_short}
+${color}Kernel: $color1$kernel 
+${color}Uptime: $color1$uptime
+$color1${if_match "${acpiacadapter AC0}" == "off-line"}${font Poky:size=12}5$font$endif${if_match "${acpiacadapter AC0}" == "on-line"}${font Poky:size=12}T$font$endif ${voffset -5}$color${battery_percent}% $alignr${color1}${battery_bar 4,150}
+${color1}Weather $hr
+${color}Outside temperature: $color1${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ ESSB temperature}${color1}°C
+#System
+${color1}System $hr
+${color1}${font Poky:size=12}P$font $color1$freq_g Ghz ${voffset -6}${color1}${font Weather:size=14}y$font $color1${acpitemp}°C
+${color}RAM Usage: $color1$memperc% ${membar 4}
+${color}Swap Usage:$color1$swapperc% ${swapbar 4}
+${cpugraph}
+${color}Core 1: $color${cpu cpu0}% $alignr${cpubar cpu0 4,130}
+${color}Core 2: $color${cpu cpu1}% $alignr${cpubar cpu1 4,130}
+${color}Core 3: $color${cpu cpu2}% $alignr${cpubar cpu2 4,130}
+${color}Core 4: $color${cpu cpu3}% $alignr${cpubar cpu3 4,130}
+${color}Processes: $color1$processes  ${color}Running: $color1$running_processes
+${color1}Storage $color$hr
+${color1}${font Poky:size=12}y${font}${color} /$color1$alignr${fs_bar 4,150 /}
+${color1}${font Poky:size=12}y${font}${color} //home$color1$alignr${fs_bar 4,150 /mnt/home}
+${color1}Network $color$hr
+${color1}${font Poky:size=8}w ${offset -6}$color${font}ESSID $alignr$color1${wireless_essid wlan0}
+${color1}${font Poky:size=10}Y ${offset -7}$color${font}Connectivity $alignr$color1${wireless_link_qual_perc wlan0}%
+${color}${alignc}Up: $color1${upspeed eth0}${color}-  Down: $color1${downspeed eth0}
+${voffset 0}
