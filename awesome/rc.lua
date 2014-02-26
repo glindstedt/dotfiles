@@ -607,10 +607,10 @@ awful.util.spawn_with_shell("sudo ip link set wlan0 up")
 awful.util.spawn_with_shell("synclient HorizTwoFingerScroll=1")
 
 -- wicd-client start
-run_once("wicd-client --tray")
+--run_once("wicd-client --tray")
 -- conky
-run_once("conky -d")
+--run_once("conky -d")
 -- pidgin
-run_once("pidgin")
+--run_once("pidgin")
 -- radiotray
-run_once("radiotray")
+--run_once("radiotray")
