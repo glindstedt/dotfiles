@@ -60,6 +60,6 @@ export EDITOR=vim
 # Make java GUI work with tiling WM
 _JAVA_AWT_WM_NONREPARENTING=1; export _JAVA_AWT_WM_NONREPARENTING
 
-PS1='[\u@\h \W]\$ '
+PS1="${FGRN}[\u@\h \W]\$${RS} "
 
-fortune | cowsay -n
+#fortune | cowsay -n
