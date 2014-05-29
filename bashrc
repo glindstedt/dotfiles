@@ -2,6 +2,9 @@
 # ~/.bashrc
 #
 
+# Source system profile
+[[ -f /etc/profile ]] && . /etc/profile
+
 # ANSI color codes for easier prompt setting
 # Options: Bold=1; Underline=4;
 # Put options before \dm for example: "\[\033[1;32m\]"
