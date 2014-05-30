@@ -16,8 +16,8 @@ URxvt*scrollBar: false
 ! Check in /usr/share/fonts/fonts.dir for font names such as this V
 ! nice proggy font: -*-proggytinysz-medium-*-*-*-*-*-*-*-*-*-iso8859-*
 ! ubuntu mono font: xft:Ubuntu Mono:pixelsize=11
-! envy code r:      xft:envy code r:pixelsize=11
-URxvt*font: xft:envy code r:pixelsize=10
+! envy code r:      xft:envy code r:pixelsize=10
+URxvt*font: envypn-13
 
 ! when app sends bell to terminal, awesome highlights the appropriate tag
 URxvt*urgentOnBell: true

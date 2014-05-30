@@ -17,6 +17,10 @@ if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
   echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
 
+# Enable envypn font
+xset +fp /usr/share/fonts/envypn
+xset fp rehash
+
 # Load .Xresources
 xrdb ~/.Xresources
 
@@ -44,7 +48,7 @@ xsetroot -cursor_name left_ptr
 # xbindkeys &
 
 # Load Window Manager
-DEFAULT_SESSION=bspwm
+DEFAULT_SESSION=awesome
 case $1 in
     awesome)
         exec dbus-launch awesome
@@ -70,18 +74,6 @@ case $1 in
         exec dbus-launch bspwm -c /home/glindste/.config/bspwm/bspwmrc -s "$PANEL_FIFO" -p W 2> ~/.bspwm.log
         ;;
     *)
-        # bar could not find font issue fix
-        xset +fp /usr/share/fonts/local
-        xset fp rehash
-        # end fix
-
-        # Keybindings
-        sxhkd &
-
-        # Create fifo pipe
-        [ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
-        mkfifo "$PANEL_FIFO"
-
-        exec dbus-launch bspwm -c /home/glindste/.config/bspwm/bspwmrc -s "$PANEL_FIFO" -p W 2> ~/.bspwm.log
+        exec dbus-launch awesome
         ;;
 esac
