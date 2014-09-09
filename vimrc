@@ -1,9 +1,6 @@
-" 
+"
 " Vimrc
 "
-
-scriptencoding utf-8
-set encoding=utf-8
 
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
@@ -79,7 +76,7 @@ if has("autocmd")
 
 else
 
-  set autoindent		" always set autoindenting on
+set autoindent		" always set autoindenting on
 
 endif " has("autocmd")
 
@@ -134,15 +131,58 @@ nmap <silent> <leader>s :set nolist!<CR>
 " Sets message options
 set shortmess=atI
 
-" Set indent amount
+" INDENTATION ----------------------------
+
+" Preserve existing indent structure
+set copyindent
+set preserveindent
+
+let b:tabwidth=4
+let &tabstop=b:tabwidth
+let &shiftwidth=b:tabwidth
+let &softtabstop=b:tabwidth
 set expandtab
-set shiftwidth=4
-set softtabstop=4
+
+function TabToggle()
+    if &expandtab
+        let &shiftwidth=b:tabwidth
+        set softtabstop=0
+        set noexpandtab
+    else
+        let &shiftwidth=b:tabwidth
+        let &softtabstop=b:tabwidth
+        set expandtab
+    endif
+endfunction
+
+function SetIndent(indent)
+	let b:tabwidth=a:indent
+	let &tabstop=b:tabwidth
+	let &shiftwidth=b:tabwidth
+	if &expandtab
+		let &softtabstop=b:tabwidth
+	endif
+endfunction
+
+nmap <silent> <leader>t mz:execute TabToggle()<CR>'z
+nmap <silent> <leader>2 mz:execute SetIndent(2)<CR>'z
+nmap <silent> <leader>4 mz:execute SetIndent(4)<CR>'z
+nmap <silent> <leader>6 mz:execute SetIndent(6)<CR>'z
+nmap <silent> <leader>8 mz:execute SetIndent(8)<CR>'z
+
+" Highlight columns over 80
+if exists('+colorcolumn')
+	set colorcolumn=80
+	highlight ColorColumn ctermbg=darkgrey
+else
+	highlight OverLength ctermbg=darkred ctermfg=grey guibg=#592929
+	match OverLength /\%81v.\+/
+endif
 
 " VIM-LATEX SETTINGS -------------------------------------------------
 
 " REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-filetype plugin on
+" filetype plugin on
 
 " IMPORTANT: win32 users will need to have 'shellslash' set so that latex
 " can be called correctly.
@@ -154,16 +194,47 @@ filetype plugin on
 set grepprg=grep\ -nH\ $*
 
 " OPTIONAL: This enables automatic indentation as you type.
-filetype indent on
+" filetype indent on
 
 " OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 
+" VUNDLE -------------------------------------------------------------
+filetype off " dunno why.
+set rtp+=~/.vim/bundle/Vundle.vim
+set shell=/bin/bash " lots of errors if fish is used
+call vundle#begin()
+
+" manage Vundle with Vundle :P
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'kien/ctrlp.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'ervandew/supertab'
+Plugin 'tpope/vim-surround'
+Plugin 'bling/vim-airline'
+
+" Coffeescript
+Bundle 'kchmck/vim-coffee-script'
+
+" { Clojure
+" Syntax highligh & indent
+Plugin 'guns/vim-clojure-static'
+Plugin 'kien/rainbow_parentheses.vim'
+" Repl, requires cider/cider-nrepl plugin for leiningen
+Plugin 'tpope/vim-fireplace'
+
+" }
+
+call vundle#end()
+
 " Pathogen ------------------------------------------
-execute pathogen#infect()
-execute pathogen#helptags()
+"execute pathogen#infect()
+"execute pathogen#helptags()
 syntax on
 filetype plugin indent on
 
@@ -171,8 +242,11 @@ filetype plugin indent on
 " set background=dark
 " colorscheme solarized
 
+" Make airline appear always
+set laststatus=2
+
 " NERDTree ------------------------------------------
-autocmd vimenter * if !argc() | NERDTree | endif
+"autocmd vimenter * if !argc() | NERDTree | endif
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " OpenGL shader syntax highlight
