@@ -2,34 +2,40 @@
 -- Default awesome theme --
 ---------------------------
 
-theme = {}
+local colors = require("config/colors")
 
 -- {{{ Meta
-themedir = os.getenv("HOME") .. "/.config/awesome/theme"
+awesomedir = os.getenv("HOME") .. "/.config/awesome"
+themedir = awesomedir .. "/theme"
+
+theme = {}
 
 -- Theme font
-theme.font          = "cure 7"--nice terminator:"ter-212n 7" -- Default font: sans
--- Awesome icon
+theme.font         = "cure 7"--nice terminator:"ter-212n 7" -- Default font: sans
+-- Icons
 theme.awesome_icon = themedir .. "/icons/xbm8x8/arch_10x10.png"
 -- }}}
 
--- {{{ Colors
-theme.bg_normal     = "#2D2D2D" --#262626 #0F190E
-theme.bg_focus      = "#1E2F1F" -- DarkGreen:#0F210E  Highlight:#4C6A29  ToolTipBase:#5C8B29
-theme.bg_urgent     = "#502928"
-theme.bg_minimize   = "#262826"
+-- lain stuff
+theme.useless_gap_width = 10
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#aaaaaa"
-theme.fg_urgent     = "#aaaaaa"
-theme.fg_minimize   = "#aaaaaa"
+-- {{{ Colors, grab them from the colors file
+theme.bg_normal     = colors.bg_normal --#262626 #0F190E
+theme.bg_focus      = colors.bg_focus -- DarkGreen:#0F210E  Highlight:#4C6A29  ToolTipBase:#5C8B29
+theme.bg_urgent     = colors.bg_urgent
+theme.bg_minimize   = colors.bg_minimize
+
+theme.fg_normal     = colors.fg_normal
+theme.fg_focus      = colors.fg_focus
+theme.fg_urgent     = colors.fg_urgent
+theme.fg_minimize   = colors.fg_minimize
 --- }}}
 
 -- {{{ Borders
-theme.border_width  = "0"
-theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
-theme.border_marked = "#91231c"
+theme.border_width  = "1"
+theme.border_normal = colors.border_normal
+theme.border_focus  = colors.border_focus
+theme.border_marked = colors.border_marked
 --- }}}
 
 
