@@ -108,19 +108,19 @@ function keybinds.init(settings)
 
         -- MPD Controls
         awful.key({ }, "XF86AudioPlay", function ()
-                                            awful.util.spawn_with_shell("ncmpcpp toggle")
+                                            awful.util.spawn_with_shell("mpc toggle")
                                             settings.widgets.mpd.update()
                                         end),
         awful.key({ }, "XF86AudioStop", function ()
-                                            awful.util.spawn_with_shell("ncmpcpp stop")
+                                            awful.util.spawn_with_shell("mpc stop")
                                             settings.widgets.mpd.update()
                                         end),
         awful.key({ }, "XF86AudioNext", function ()
-                                            awful.util.spawn_with_shell("ncmpcpp next")
+                                            awful.util.spawn_with_shell("mpc next")
                                             settings.widgets.mpd.update()
                                         end),
         awful.key({ }, "XF86AudioPrev", function ()
-                                            awful.util.spawn_with_shell("ncmpcpp prev")
+                                            awful.util.spawn_with_shell("mpc prev")
                                             settings.widgets.mpd.update()
                                         end),
 
