@@ -9,6 +9,8 @@ alias SL='sl -aF'
 
 alias cmd='command'
 
+alias gen-sshkey='ssh-keygen -C "$(whoami)@$(hostname)-$(date -I)"'
+
 # grc
 alias ping='grc ping'
 alias ping6='grc ping6'
