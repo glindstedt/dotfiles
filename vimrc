@@ -9,6 +9,7 @@ call plug#begin('~/.vim/plugged')
 
 " Theme
 Plug 'morhetz/gruvbox'
+Plug 'mhartington/oceanic-next'
 
 " Environment
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree','NERDTreeToggle'] }
@@ -18,8 +19,18 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'benekastah/neomake'
+Plug 'kana/vim-arpeggio'
+Plug 'airblade/vim-rooter'
+Plug 'KabbAmine/zeavim.vim'
+
+" Manpage viewing
+Plug 'nhooyr/neoman.vim'
+
+" This destroys tab-completion...
+" Plug 'vim-scripts/Smart-Tabs'
 
 " Language specifics
 
@@ -99,7 +110,7 @@ endif
 set title
 
 " Set shell
-set shell=/bin/bash
+set shell=/usr/bin/bash
 
 " Enable hidden buffers, i.e. don't abandon buffer on close
 set hidden
@@ -135,8 +146,8 @@ set preserveindent
 let b:tabwidth=4
 let &tabstop=b:tabwidth
 let &shiftwidth=b:tabwidth
-let &softtabstop=b:tabwidth
-set expandtab
+set softtabstop=-1      " When negative the the value of 'shiftwidth' is used
+set noexpandtab
 
 syntax on
 filetype plugin indent on
@@ -180,13 +191,52 @@ let g:tex_flavor='latex'
 
 " PLUGIN SETTINGS -------------------------------------------------------- {{{
 
-" Gruvbox
-"let g:gruvbox_italic=0
-colorscheme gruvbox
+" Colour Theme {
+
+" Contrast settings
+" let g:gruvbox_contrast_light='hard'
+" let g:gruvbox_contrast_dark='medium'
+
+" Enable true color support
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+let g:airline_theme='bubblegum'
+
+" Color Scheme
+" colorscheme gruvbox
+colorscheme OceanicNext
+
+" Default scheme
 set background=dark
+
+" If you want to customize the terminal color scheme, here's how:
+" let g:terminal_color_0  = '#2e3436'
+" let g:terminal_color_1  = '#cc0000'
+" let g:terminal_color_2  = '#4e9a06'
+" let g:terminal_color_3  = '#c4a000'
+" let g:terminal_color_4  = '#3465a4'
+" let g:terminal_color_5  = '#75507b'
+" let g:terminal_color_6  = '#0b939b'
+" let g:terminal_color_7  = '#d3d7cf'
+" let g:terminal_color_8  = '#555753'
+" let g:terminal_color_9  = '#ef2929'
+" let g:terminal_color_10 = '#8ae234'
+" let g:terminal_color_11 = '#fce94f'
+" let g:terminal_color_12 = '#729fcf'
+" let g:terminal_color_13 = '#ad7fa8'
+" let g:terminal_color_14 = '#00f5e9'
+" let g:terminal_color_15 = '#eeeeec'
+
+" }
+
+" Airline config
 
 " Make airline appear always, even on non-focused windows
 set laststatus=2
+
+" Enable powerline fonts
+let g:airline_powerline_fonts=1
+
 
 " Neomake
 let g:neomake_markdown_maker = {
@@ -211,6 +261,10 @@ let g:neomake_markdown_maker = {
 " call NERDTreeHighlightFile('lua', 'Red', 'none', '#ffa500', '#151515')
 " call NERDTreeHighlightFile('c', 'Magenta', 'none', '#ff00ff', '#151515')
 
+
+" Syntastic java
+let g:syntastic_java_javac_config_file_enabled = 1
+
 " END PLUGIN SETTINGS }}}
 
 " FUNCTIONS -------------------------------------------------------------- {{{
@@ -225,7 +279,7 @@ endfunction
 function! TabToggle()
     if &expandtab
         let &shiftwidth=b:tabwidth
-        set softtabstop=0
+        set softtabstop=-1
         set noexpandtab
     else
         let &shiftwidth=b:tabwidth
@@ -287,6 +341,9 @@ nnoremap _ ddkP
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
+" Search for selection in visual mode
+vnoremap * y/<C-R>"<cr>
+
 " Make window navigation easier with the neovim terminal
 if has("nvim")
     tnoremap <A-h> <C-\><C-n><C-w>h
@@ -295,6 +352,9 @@ if has("nvim")
     tnoremap <A-l> <C-\><C-n><C-w>l
     tnoremap <A-n> <C-\><C-n>gt
     tnoremap <A-p> <C-\><C-n>gT
+    tnoremap <A-v> <C-\><C-n><C-w>v
+    tnoremap <A-s> <C-\><C-n><C-w>s
+    tnoremap <A-t> <C-\><C-n>:tabnew<cr>
 endif
 nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
@@ -317,6 +377,7 @@ nnoremap <A->> <C-w>>
 nnoremap <A-s> <C-w>s
 nnoremap <A-v> <C-w>v
 nnoremap <A-c> <C-w>c
+nnoremap <A-t> <esc>:tabnew<cr>
 
 vnoremap <A--> <C-w>-
 vnoremap <A-+> <C-w>+
@@ -325,6 +386,7 @@ vnoremap <A->> <C-w>>
 vnoremap <A-s> <C-w>s
 vnoremap <A-v> <C-w>v
 vnoremap <A-c> <C-w>c
+vnoremap <A-t> <esc>:tabnew<cr>
 
 " Surround a word with things
 nnoremap <leader>s" viw<esc>a"<esc>hbi"<esc>lel
@@ -372,6 +434,9 @@ nnoremap <silent> <leader>pd :PlugDiff<cr>
 nnoremap <silent> <leader>ps :PlugStatus<cr>
 nnoremap <silent> <leader>pp :PlugUpgrade<cr>
 
+" vim-arpeggio
+call arpeggio#map('i', '', 0, 'jk', '<esc>')
+
 " Taskwarrior
 
 nnoremap <silent> <leader>tn :TW next<cr>
@@ -411,8 +476,8 @@ if has("autocmd")
     augroup vimrcEx
         au!
 
-        " For all text files set 'textwidth' to 78 characters.
-        autocmd FileType text setlocal textwidth=78
+        " For all text files set 'textwidth' to 80 characters.
+        autocmd FileType text setlocal textwidth=80
 
         " When editing a file, always jump to the last known cursor position.
         " Don't do it when the position is invalid or when inside an event
@@ -436,6 +501,12 @@ if has("autocmd")
     aug filetype_vim
         au!
         au FileType vim setlocal foldmethod=marker
+    aug END
+
+    aug filetype_tex
+        au!
+        au FileType tex setlocal textwidth=80
+        au FileType tex setlocal spell
     aug END
 
     aug vimrc_snippets
@@ -480,6 +551,15 @@ if has("autocmd")
         au!
         au vimenter * echom "   >^.^< ---(meow)"
     aug END
+
+    " aug vimrc_rooter
+        " Changes the directory to root of project every time a buffer is
+        " entered (is there a better way??)
+        " uses the vim-rooter plugin
+        " DOESN'T WORK
+        " au!
+        " au bufenter * silent :Rooter
+    " aug END
 
     " aug vimrc_nerdtree_open_on_empty
     "     au!
