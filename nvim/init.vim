@@ -2,7 +2,7 @@
 " Vimrc
 "
 
-language en_US
+language en_US.UTF-8
 
 " PLUGINS ---------------------------------------------------------------- {{{
 
@@ -274,7 +274,7 @@ let g:airline_theme='bubblegum'
 
 " Color Scheme
 " colorscheme gruvbox
-colorscheme OceanicNext
+" colorscheme OceanicNext
 
 " Default scheme
 set background=dark
