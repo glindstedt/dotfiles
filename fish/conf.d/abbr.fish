@@ -12,5 +12,5 @@ if status --is-interactive
     abbr --add --global gsta git stash
     abbr --add --global gcm git commit
     abbr --add --global gam git commit --amend --no-edit
-    abbr --add --global gpo git push -u origin (git_branch_name)
+    abbr --add --global gpo 'git push -u origin (git_branch_name)'
 end
