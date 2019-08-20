@@ -5,6 +5,8 @@ if status --is-interactive
     abbr --add --global gpl git pull
     abbr --add --global gps git push
     abbr --add --global gbr git branch
+    abbr --add --global gsw git switch
+    abbr --add --global grs git restore
     abbr --add --global glg git log --graph --all
     abbr --add --global grb git rebase
     abbr --add --global gdf git diff --ws-error-highlight=all
