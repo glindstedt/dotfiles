@@ -1,0 +1,21 @@
+[user]
+	name = Gustaf Lindstedt
+[core]
+	editor = nvim
+[push]
+	default = simple
+[alias]
+	l = log --oneline --graph
+[commit]
+	verbose = true
+[color "diff"]
+	old = red
+	meta = white bold
+	frag = cyan
+	func = magenta bold
+[color "branch"]
+	current = cyan
+[color "status"]
+	untracked = cyan dim
+	header = white dim
+	branch = cyan
