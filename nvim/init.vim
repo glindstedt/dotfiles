@@ -7,7 +7,7 @@ language en_US.UTF-8
 " PLUGINS ---------------------------------------------------------------- {{{
 
 " Begin vim-plug
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Theme
 " Plug 'morhetz/gruvbox'
