@@ -27,25 +27,15 @@ Plug 'benekastah/neomake'
 Plug 'kana/vim-arpeggio'
 Plug 'airblade/vim-rooter'
 Plug 'KabbAmine/zeavim.vim'
+Plug 'jaxbot/semantic-highlight.vim'
 
-" TabNine
-Plug 'zxqfl/tabnine-vim'
-
-" Manpage viewing
-Plug 'nhooyr/neoman.vim'
+" CoC
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Fish
 Plug 'dag/vim-fish'
 
-" This destroys tab-completion...
-" Plug 'vim-scripts/Smart-Tabs'
-
 " Language specifics
-
-" Clojure
-Plug 'guns/vim-clojure-static'
-" Repl, requires cider/cider-nrepl plugin for leiningen
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Pandoc
 Plug 'vim-pandoc/vim-pandoc'
@@ -54,29 +44,11 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 " Rust
 Plug 'wting/rust.vim'
 
-" Coffeescript
-Plug 'kchmck/vim-coffee-script'
-
-" Moonscript
-Plug 'leafo/moonscript-vim'
-
-" GLSL
-Plug 'tikhomirov/vim-glsl'
-
-" ooc
-Plug 'fasterthanlime/ooc.vim'
-
-" Python
-Plug 'nvie/vim-flake8'
-
 " Jinja
 Plug 'lepture/vim-jinja'
 
 " Ansible
 Plug 'pearofducks/ansible-vim'
-
-" Taskwarrior
-" Plug 'blindFS/vim-taskwarrior'
 
 " Git integration
 Plug 'tpope/vim-fugitive'
@@ -84,11 +56,11 @@ Plug 'tpope/vim-fugitive'
 " jsonnet
 Plug 'google/vim-jsonnet'
 
+" Dhall
+Plug 'vmchale/dhall-vim'
+
 " terraform
 Plug 'hashivim/vim-terraform'
-
-" Dlang
-Plug 'idanarye/vim-dutyl'
 
 " UltiSnips
 Plug 'SirVer/ultisnips'
@@ -307,13 +279,6 @@ set laststatus=2
 " Enable powerline fonts
 let g:airline_powerline_fonts=1
 
-
-" Neomake
-let g:neomake_markdown_maker = {
-    \ 'exe': 'pandoc',
-    \ 'args': ['-s','-t','latex','-o','neomake_out.pdf']
-    \ }
-
 " NERDTree
 
 " DOESN'T WORK!!!!
@@ -334,6 +299,7 @@ let g:neomake_markdown_maker = {
 
 " Syntastic java
 let g:syntastic_java_javac_config_file_enabled = 1
+let g:syntastic_python_checkers = ['flake8']
 
 " Jsonnet fmt
 let g:jsonnet_fmt_options = '--indent 4 --string-style d --comment-style s'
@@ -585,8 +551,8 @@ if has("autocmd")
 
     aug filetype_pandoc
         au!
-        au FileType tex setlocal textwidth=80
-        au FileType tex setlocal spell
+        au FileType pandoc setlocal textwidth=80
+        au FileType pandoc setlocal nospell
     aug END
 
     aug filetype_yaml
