@@ -304,6 +304,9 @@ let g:syntastic_python_checkers = ['flake8']
 " Jsonnet fmt
 let g:jsonnet_fmt_options = '--indent 4 --string-style d --comment-style s'
 
+" Terraform fmt
+let g:terraform_fmt_on_save=1
+
 " END PLUGIN SETTINGS }}}
 
 " FUNCTIONS -------------------------------------------------------------- {{{
