@@ -17,7 +17,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree','NERDTreeToggle'] }
 Plug 'scrooloose/syntastic'
 Plug 'kien/ctrlp.vim'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
