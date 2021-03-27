@@ -9,40 +9,42 @@ language en_US.UTF-8
 " Begin vim-plug
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Theme
-" Plug 'morhetz/gruvbox'
-" Plug 'mhartington/oceanic-next'
+Plug 'arcticicestudio/nord-vim'
 
-" Environment
+" Basic
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTree','NERDTreeToggle'] }
+Plug 'airblade/vim-rooter'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/syntastic'
-Plug 'kien/ctrlp.vim'
 Plug 'mg979/vim-visual-multi'
-Plug 'ervandew/supertab'
+" Plug 'ervandew/supertab'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'benekastah/neomake'
-Plug 'kana/vim-arpeggio'
-Plug 'airblade/vim-rooter'
-Plug 'KabbAmine/zeavim.vim'
 Plug 'jaxbot/semantic-highlight.vim'
 
-" CoC
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
-" Fish
-Plug 'dag/vim-fish'
+" Language Server Protocol
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/lsp_extensions.nvim'
+Plug 'nvim-lua/completion-nvim'
 
 " Language specifics
+
+" Fish
+Plug 'georgewitteman/vim-fish'
 
 " Pandoc
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 " Rust
-Plug 'wting/rust.vim'
+Plug 'rust-lang/rust.vim'
+
+" TOML
+Plug 'cespare/vim-toml'
 
 " Jinja
 Plug 'lepture/vim-jinja'
@@ -55,9 +57,6 @@ Plug 'tpope/vim-fugitive'
 
 " jsonnet
 Plug 'google/vim-jsonnet'
-
-" Dhall
-Plug 'vmchale/dhall-vim'
 
 " terraform
 Plug 'hashivim/vim-terraform'
@@ -72,9 +71,6 @@ Plug 'chr4/nginx.vim'
 " Bazel
 Plug 'bazelbuild/vim-ft-bzl'
 
-" Varnish
-Plug 'fgsch/vim-varnish'
-
 " jq
 Plug 'vito-c/jq.vim'
 
@@ -84,16 +80,14 @@ Plug 'JuliaEditorSupport/julia-vim'
 " Meson
 Plug 'igankevich/mesonic'
 
+" GLSL
+Plug 'tikhomirov/vim-glsl'
+
 call plug#end()
 
 " END PLUGINS }}}
 
 " BASIC SETTINGS --------------------------------------------------------- {{{
-
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-    finish
-endif
 
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -107,9 +101,6 @@ set history=50      " keep 50 lines of command line history
 set ruler           " show the cursor position all the time
 set showcmd         " display incomplete commands
 set incsearch       " do incremental searching
-
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -127,13 +118,13 @@ endif
 set title
 
 " Set shell
-set shell=/usr/local/bin/fish
+set shell=fish
 
 " Enable hidden buffers, i.e. don't abandon buffer on close
 set hidden
 
 " Sets message options
-set shortmess=atI
+" set shortmess=atI
 
 " Show more autocompletion
 set wildmode=list:longest
@@ -186,33 +177,11 @@ else
     match OverLength /\%81v.\+/
 endif
 
-" VIM-LATEX SETTINGS ----------------------------------------------------- {{{
-
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-" set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
-
-" END VIM-LATEX SETTINGS }}}
-
 " END BASIC SETTINGS }}}
 
 " PLUGIN SETTINGS -------------------------------------------------------- {{{
 
 " Colour Theme {
-
-" Contrast settings
-" let g:gruvbox_contrast_light='hard'
-" let g:gruvbox_contrast_dark='medium'
 
 " TODO work in progress
 
@@ -242,14 +211,13 @@ if has("nvim")
     endif
 endif
 
-let g:airline_theme='bubblegum'
-
-" Color Scheme
-" colorscheme gruvbox
-" colorscheme OceanicNext
-
 " Default scheme
-set background=dark
+" colorscheme nord
+
+" hi Pmenu ctermbg=59
+" hi Comment ctermfg=8
+
+" set background=dark
 
 " If you want to customize the terminal color scheme, here's how:
 " let g:terminal_color_0  = '#2e3436'
@@ -272,6 +240,7 @@ set background=dark
 " }
 
 " Airline config
+let g:airline_theme='deus'
 
 " Make airline appear always, even on non-focused windows
 set laststatus=2
@@ -279,27 +248,17 @@ set laststatus=2
 " Enable powerline fonts
 let g:airline_powerline_fonts=1
 
-" NERDTree
-
-" DOESN'T WORK!!!!
-" call NERDTreeHighlightFile('python', 'green', 'none', 'green', '#151515')
-" call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
-" call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
-" call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
-" call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
-" call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
-" call NERDTreeHighlightFile('lua', 'Red', 'none', '#ffa500', '#151515')
-" call NERDTreeHighlightFile('c', 'Magenta', 'none', '#ff00ff', '#151515')
-
-
-" Syntastic java
+" Syntastic
 let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_python_checkers = ['flake8']
+
+" Supertab
+" let g:SuperTabDefaultCompletionType = "<c-n>"
+
+" Semantic Highlight
+" TODO make pretty
+"let s:semanticGUIColors = [28,1,2,3,4,5,6,7,25,9,10,34,12,13,14,15,16,125,124,19]
+"let s:semanticGUIColors = [ '#72d572', '#c5e1a5', '#e6ee9c', '#fff59d', '#ffe082', '#ffcc80', '#ffab91', '#bcaaa4', '#b0bec5', '#ffa726', '#ff8a65', '#f9bdbb', '#f9bdbb', '#f8bbd0', '#e1bee7', '#d1c4e9', '#ffe0b2', '#c5cae9', '#d0d9ff', '#b3e5fc', '#b2ebf2', '#b2dfdb', '#a3e9a4', '#dcedc8' , '#f0f4c3', '#ffb74d' ]
 
 " Jsonnet fmt
 let g:jsonnet_fmt_options = '--indent 4 --string-style d --comment-style s'
@@ -361,9 +320,6 @@ inoremap <c-u> <esc>gUiw`]a
 
 " Remove line in insert mode
 inoremap <c-d> <esc>cc
-
-" Don't use Ex mode, use Q for formatting
-nnoremap Q gq
 
 " Hide search highlighting
 nnoremap <silent> <leader>m :silent :nohlsearch<cr>
@@ -471,15 +427,6 @@ nnoremap <silent> <leader>pc :PlugClean<cr>
 nnoremap <silent> <leader>pd :PlugDiff<cr>
 nnoremap <silent> <leader>ps :PlugStatus<cr>
 nnoremap <silent> <leader>pp :PlugUpgrade<cr>
-
-" vim-arpeggio
-call arpeggio#map('i', '', 0, 'jk', '<esc>')
-
-" Taskwarrior
-
-nnoremap <silent> <leader>tn :TW next<cr>
-nnoremap <silent> <leader>tl :TW list<cr>
-nnoremap <silent> <leader>ts :TWSync<cr>
 
 " vim-fugitive (Git)
 nnoremap <silent> <leader>gs :Gstatus<cr>
@@ -606,21 +553,6 @@ if has("autocmd")
         au vimenter * echom "   >^.^< ---(meow)"
     aug END
 
-    " aug vimrc_rooter
-        " Changes the directory to root of project every time a buffer is
-        " entered (is there a better way??)
-        " uses the vim-rooter plugin
-        " DOESN'T WORK
-        " au!
-        " au bufenter * silent :Rooter
-    " aug END
-
-    " aug vimrc_nerdtree_open_on_empty
-    "     au!
-    "     au StdinReadPre * let s:std_in=1
-    "     au VimEnter * if (argc() == 0 && !exists("s:std_in")) | NERDTree
-    " aug END
-
 else
 
   " Always set autoindenting on
@@ -629,3 +561,82 @@ else
 endif " has("autocmd")
 
 " END AUTOCOMMANDS }}}
+
+" {{{ LANGUAGE SERVER PROTOCOL
+
+" Set completeopt to have a better completion experience
+" :help completeopt
+" menuone: popup even when there's only one match
+" noinsert: Do not insert text until a selection is made
+" noselect: Do not select, force user to select one from the menu
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing extra messages when using completion
+set shortmess+=c
+
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
+set updatetime=1000
+" Show diagnostic popup on cursor hold
+autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[    :lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> g]    :lua vim.lsp.diagnostic.goto_next()<CR>
+
+nnoremap <silent> gD    :lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> :lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   :lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    :lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    :lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    :lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    :lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> ga    :lua vim.lsp.buf.code_action()<CR>
+
+" Configure LSP
+" https://github.com/neovim/nvim-lspconfig#rust_analyzer
+lua <<EOF
+
+-- nvim_lsp object
+local nvim_lsp = require'lspconfig'
+
+-- function to attach completion when setting up lsp
+local on_attach = function(client)
+    require'completion'.on_attach(client)
+end
+
+-- Enable rust_analyzer
+nvim_lsp.rust_analyzer.setup({
+    on_attach=on_attach,
+    settings={
+        ["rust-analyzer"] = {
+            cargo = {
+                -- needed for procMacro.enable = true
+                loadOutDirsFromCheck = true
+            },
+            diagnostics = {
+                enable = true,
+                enableExperimental = true,
+            },
+            procMacro = {
+                enable = null
+            },
+        },
+    }
+})
+
+-- Enable diagnostics
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = true,
+    signs = true,
+    update_in_insert = true,
+  }
+)
+EOF
+
+" Enable type inlay hints
+autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
+\ lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
+
+" END LANGUAGE SERVER PROTOCOL }}}
