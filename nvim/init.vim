@@ -261,7 +261,7 @@ let g:syntastic_python_checkers = ['flake8']
 "let s:semanticGUIColors = [ '#72d572', '#c5e1a5', '#e6ee9c', '#fff59d', '#ffe082', '#ffcc80', '#ffab91', '#bcaaa4', '#b0bec5', '#ffa726', '#ff8a65', '#f9bdbb', '#f9bdbb', '#f8bbd0', '#e1bee7', '#d1c4e9', '#ffe0b2', '#c5cae9', '#d0d9ff', '#b3e5fc', '#b2ebf2', '#b2dfdb', '#a3e9a4', '#dcedc8' , '#f0f4c3', '#ffb74d' ]
 
 " Jsonnet fmt
-let g:jsonnet_fmt_options = '--indent 4 --string-style d --comment-style s'
+let g:jsonnet_fmt_options = '--indent 2 --comment-style h' " --string-style d --comment-style s'
 
 " Terraform fmt
 let g:terraform_fmt_on_save=1
@@ -640,3 +640,10 @@ autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
 \ lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 
 " END LANGUAGE SERVER PROTOCOL }}}
+
+
+if exists('g:vscode')
+    " VSCode extension
+else
+    " ordinary neovim
+endif
