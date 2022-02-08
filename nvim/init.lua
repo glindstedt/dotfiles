@@ -1,0 +1,5 @@
+require("plugins")
+require("settings")
+require("mappings")
+require("functions")
+require("plugin-settings")
