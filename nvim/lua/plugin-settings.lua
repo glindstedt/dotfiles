@@ -71,7 +71,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", nmap_opts)
   buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", nmap_opts)
   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<cr>", nmap_opts)
+
+  -- Format on save
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd([[
+        augroup LspFormatting
+            autocmd! * <buffer>
+            autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        augroup END
+        ]])
+  end
 end
+
 local lsp_common_settings = {
   on_attach = on_attach,
   flags = {
@@ -80,16 +91,18 @@ local lsp_common_settings = {
   },
 }
 local lspconfig = require("lspconfig")
-lspconfig["rust_analyzer"].setup(lsp_common_settings)
-local gopls_settings = {
-  --
+-- rust-tools sets up the `rust_analyzer` lsp with the lsp settings under `server`
+require("rust-tools").setup({
+  server = lsp_common_settings,
+})
+
+lspconfig["gopls"].setup({
   cmd = { "gopls", "-remote=auto" },
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
   },
-}
-lspconfig["gopls"].setup(gopls_settings)
+})
 
 -- null-ls
 local null_ls = require("null-ls")
@@ -106,16 +119,7 @@ null_ls.setup({
     --null_ls.builtins.completion.spell,
   },
   diagnostics_format = "[#{c}] #{m} (#{s})",
-  on_attach = function(client)
-    if client.resolved_capabilities.document_formatting then
-      vim.cmd([[
-        augroup LspFormatting
-            autocmd! * <buffer>
-            autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        augroup END
-        ]])
-    end
-  end,
+  on_attach = on_attach,
 })
 
 -- nvim-cmp
@@ -147,9 +151,6 @@ cmp.setup({
 
 -- luasnip
 require("luasnip.loaders.from_vscode").load()
-
--- rust-tools
-require("rust-tools").setup({})
 
 -- Neorg
 require("neorg").setup({
