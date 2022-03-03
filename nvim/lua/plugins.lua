@@ -37,6 +37,7 @@ return require("packer").startup(function(use)
   use("preservim/nerdcommenter") -- Toggle commenting on lines
   use("tpope/vim-sleuth") -- Automatically detect indentation
   use("editorconfig/editorconfig-vim") -- Detect .editorconfig
+  use("tpope/vim-unimpaired") -- Useful bindings
 
   -- UI
   use("EdenEast/nightfox.nvim")
