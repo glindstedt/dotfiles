@@ -23,6 +23,7 @@ require("lualine").setup({
 
 --nvim-tree
 require("nvim-tree").setup({})
+vim.g.nvim_tree_respect_buf_cwd = 1
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
@@ -158,12 +159,14 @@ require("neorg").setup({
     ["core.defaults"] = {},
     ["core.norg.dirman"] = {
       config = {
-        auto_chdir = true,
+        autochdir = true,
         workspaces = {
           work = "~/notes/work",
           home = "~/notes/home",
         },
       },
     },
+    ["core.norg.qol.toc"] = {},
+    ["core.norg.concealer"] = {},
   },
 })
