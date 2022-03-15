@@ -1,8 +1,8 @@
 -- {{{ Bootstrap packer.nvim
 local packer_repo = "wbthomason/packer.nvim"
 
+local packer_bootstrapped = false
 local function maybe_bootstrap_packer()
-  local execute = vim.api.nvim_command
   local fn = vim.fn
 
   local packer_install_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -72,6 +72,7 @@ return require("packer").startup(function(use)
       "kyazdani42/nvim-web-devicons",
     },
   })
+  use("akinsho/toggleterm.nvim")
 
   -- Basic LSP stuff
   use("neovim/nvim-lspconfig")

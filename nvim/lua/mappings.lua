@@ -1,4 +1,4 @@
-function map(mode, shortcut, command, opts_override, bufnr)
+local function map(mode, shortcut, command, opts_override, bufnr)
   local opts = {
     noremap = true,
     silent = true,
@@ -17,11 +17,11 @@ function map(mode, shortcut, command, opts_override, bufnr)
   end
 end
 
-function nmap(shortcut, command, opts)
+local function nmap(shortcut, command, opts)
   map("n", shortcut, command, opts)
 end
 
-function nmap_buf(bufnr, shortcut, command, opts)
+local function nmap_buf(bufnr, shortcut, command, opts)
   map("n", shortcut, command, opts, bufnr)
 end
 

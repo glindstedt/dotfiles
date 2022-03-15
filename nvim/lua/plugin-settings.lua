@@ -2,11 +2,6 @@
 -- https://github.com/editorconfig/editorconfig-vim#excluded-patterns
 vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
 
--- Airline
---vim.g.airline_theme = "deus"
---vim.g.airline_powerline_fonts = 1
---vim.g["airline#extensions#tabline#enabled"] = true
-
 -- Nightfox
 local nightfox = require("nightfox")
 nightfox.setup({
@@ -47,6 +42,15 @@ require("gitsigns").setup({
     map("n", "<leader>hp", '<cmd>lua require("gitsigns").preview_hunk()<CR>')
     map("n", "<leader>hr", '<cmd>lua require("gitsigns").reset_hunk()<CR>')
   end,
+})
+
+require("toggleterm").setup({
+  open_mapping = [[<c-\>]],
+  direction = "float",
+  float_opts = {
+    border = "curved",
+    winblend = 3,
+  },
 })
 
 -- Treesitter
@@ -123,6 +127,10 @@ local lspconfig = require("lspconfig")
 require("rust-tools").setup({
   server = lsp_common_settings,
 })
+-- Lua
+local runtime_path = vim.split(package.path, ";")
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 lspconfig["sumneko_lua"].setup({
   on_attach = on_attach,
   flags = {
@@ -130,8 +138,15 @@ lspconfig["sumneko_lua"].setup({
   },
   settings = {
     Lua = {
+      runtime = {
+        version = "LuaJIT",
+        path = runtime_path,
+      },
       diagnostics = {
         globals = { "vim" },
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
       },
     },
   },
