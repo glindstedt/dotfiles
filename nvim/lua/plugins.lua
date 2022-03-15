@@ -48,6 +48,22 @@ return require("packer").startup(function(use)
       "kyazdani42/nvim-web-devicons",
     },
   })
+  use({
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup({})
+    end,
+  })
+
+  use("lukas-reineke/indent-blankline.nvim")
+  use({
+    "lewis6991/gitsigns.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+    },
+  })
+  use("rcarriga/nvim-notify")
 
   use({
     "nvim-telescope/telescope.nvim",

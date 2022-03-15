@@ -42,21 +42,12 @@ vim.cmd([[
   augroup end
 ]])
 
--- Set foldmethod for vimscript
-vim.cmd([[
-  augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
-  augroup end
-]])
-
--- Set foldmethod for lua
-vim.cmd([[
-  augroup filetype_lua
-    autocmd!
-    autocmd FileType lua setlocal foldmethod=marker
-  augroup end
-]])
+-- Folding
+-- Use treesitter as foldmethod
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+--vim.opt.foldlevel = 1
+vim.opt.foldminlines = 20
 
 -- Detect dockerfile for treesitter
 vim.cmd([[

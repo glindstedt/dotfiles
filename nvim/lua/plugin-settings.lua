@@ -22,11 +22,36 @@ require("lualine").setup({
 })
 
 --nvim-tree
-require("nvim-tree").setup({})
+require("nvim-tree").setup({
+  view = {
+    width = 40,
+  },
+})
 vim.g.nvim_tree_respect_buf_cwd = 1
+
+require("indent_blankline").setup({
+  show_current_context = true,
+})
+require("gitsigns").setup({
+  on_attach = function(bufnr)
+    local function map(mode, lhs, rhs, opts)
+      opts = vim.tbl_extend("force", { noremap = true, silent = true }, opts or {})
+      vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+    end
+    -- TODO evaluate if this is the bindings I want
+    map("n", "]c", '<cmd>lua require("gitsigns").next_hunk()<CR>')
+    map("n", "[c", '<cmd>lua require("gitsigns").prev_hunk()<CR>')
+    map("n", "<leader>hb", '<cmd>lua require("gitsigns").blame_line{full=true}<CR>')
+    map("n", "<leader>hs", '<cmd>lua require("gitsigns").stage_hunk()<CR>')
+    map("n", "<leader>hu", '<cmd>lua require("gitsigns").undo_stage_hunk()<CR>')
+    map("n", "<leader>hp", '<cmd>lua require("gitsigns").preview_hunk()<CR>')
+    map("n", "<leader>hr", '<cmd>lua require("gitsigns").reset_hunk()<CR>')
+  end,
+})
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
+  ensure_installed = "maintained",
   highlight = {
     enable = true,
   },
@@ -71,6 +96,8 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", nmap_opts)
   buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", nmap_opts)
   buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", nmap_opts)
+  -- TODO maybe replace `gr` with trouble entirely
+  buf_set_keymap("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", nmap_opts)
   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<cr>", nmap_opts)
 
   -- Format on save
@@ -96,6 +123,7 @@ local lspconfig = require("lspconfig")
 require("rust-tools").setup({
   server = lsp_common_settings,
 })
+lspconfig["sumneko_lua"].setup(lsp_common_settings)
 
 lspconfig["gopls"].setup({
   cmd = { "gopls", "-remote=auto" },

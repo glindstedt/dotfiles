@@ -52,9 +52,10 @@ nmap("<leader>fg", "<cmd>Telescope live_grep<cr>")
 nmap("<leader>fb", "<cmd>Telescope buffers<cr>")
 nmap("<leader>fh", "<cmd>Telescope help_tags<cr>")
 nmap("<leader>pp", "<cmd>lua require('telescope.builtin').planets{}<cr>")
+nmap("<leader>fn", "<cmd>Telescope notify<cr>")
 
 -- Global LSP
 nmap("<space>e", "<cmd>lua vim.diagnostic.open_float()<cr>")
 nmap("[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
 nmap("]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
-nmap("<space>q", "<cmd>lua vim.diagnostic.setloclist()<cr>")
+nmap("<space>q", "<cmd>TroubleToggle document_diagnostics<cr>")
