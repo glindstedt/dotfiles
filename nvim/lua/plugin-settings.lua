@@ -123,7 +123,19 @@ local lspconfig = require("lspconfig")
 require("rust-tools").setup({
   server = lsp_common_settings,
 })
-lspconfig["sumneko_lua"].setup(lsp_common_settings)
+lspconfig["sumneko_lua"].setup({
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  },
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" },
+      },
+    },
+  },
+})
 
 lspconfig["gopls"].setup({
   cmd = { "gopls", "-remote=auto" },
