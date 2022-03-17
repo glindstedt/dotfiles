@@ -3,11 +3,12 @@
 vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
 
 -- Nightfox
-local nightfox = require("nightfox")
-nightfox.setup({
-  fox = "nightfox",
-})
-nightfox.load()
+--local nightfox = require("nightfox")
+--nightfox.setup({
+--  fox = "nightfox",
+--})
+--nightfox.load()
+vim.cmd("colorscheme nightfox")
 
 -- Lualine
 require("lualine").setup({
@@ -43,6 +44,7 @@ require("gitsigns").setup({
     map("n", "<leader>hr", '<cmd>lua require("gitsigns").reset_hunk()<CR>')
   end,
 })
+require("colorizer").setup()
 
 require("toggleterm").setup({
   open_mapping = [[<c-\>]],

@@ -64,6 +64,7 @@ return require("packer").startup(function(use)
     },
   })
   use("rcarriga/nvim-notify")
+  use("norcalli/nvim-colorizer.lua")
 
   use({
     "nvim-telescope/telescope.nvim",
