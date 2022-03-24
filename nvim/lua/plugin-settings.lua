@@ -218,8 +218,8 @@ require("neorg").setup({
       config = {
         autochdir = true,
         workspaces = {
-          work = "~/notes/work",
-          home = "~/notes/home",
+          work = "~/Sync/notes/work",
+          home = "~/Sync/notes/home",
         },
       },
     },
