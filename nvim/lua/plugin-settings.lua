@@ -162,6 +162,8 @@ lspconfig["gopls"].setup({
   },
 })
 
+lspconfig["jsonnet_ls"].setup({})
+
 -- null-ls
 local null_ls = require("null-ls")
 
