@@ -65,7 +65,29 @@ wk.register({
   ["]"] = {
     d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Go to next diagnostic" },
   },
+  g = {
+    c = {
+      name = "Comment line",
+      c = { "Toggle current line" },
+      o = { "Start comment below" },
+      O = { "Start comment above" },
+      A = { "Append comment" },
+    },
+    b = {
+      name = "Comment block",
+      c = { "Toggle current line" },
+    },
+  },
 })
+
+wk.register({
+  g = {
+    ["c"] = { "Comment lines" },
+    ["b"] = { "Comment block" },
+    [">"] = { "Comment" },
+    ["<"] = { "Uncomment" }, -- TODO this label doesn't work for some reason
+  },
+}, { mode = "x" })
 
 -- Window Control
 nmap("<A-->", "<C-w>-")

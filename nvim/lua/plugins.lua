@@ -34,7 +34,16 @@ return require("packer").startup(function(use)
   use(packer_repo)
 
   use("mg979/vim-visual-multi") -- Multiple cursor edit
-  use("preservim/nerdcommenter") -- Toggle commenting on lines
+  use({
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup({
+        mappings = {
+          extended = true,
+        },
+      })
+    end,
+  })
   use("tpope/vim-sleuth") -- Automatically detect indentation
   use("editorconfig/editorconfig-vim") -- Detect .editorconfig
   use("tpope/vim-unimpaired") -- Useful bindings
