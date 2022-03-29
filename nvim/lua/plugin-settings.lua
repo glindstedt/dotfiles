@@ -30,21 +30,35 @@ require("indent_blankline").setup({
 })
 require("gitsigns").setup({
   on_attach = function(bufnr)
-    local function map(mode, lhs, rhs, opts)
-      opts = vim.tbl_extend("force", { noremap = true, silent = true }, opts or {})
-      vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
-    end
-    -- TODO evaluate if this is the bindings I want
-    map("n", "]c", '<cmd>lua require("gitsigns").next_hunk()<CR>')
-    map("n", "[c", '<cmd>lua require("gitsigns").prev_hunk()<CR>')
-    map("n", "<leader>hb", '<cmd>lua require("gitsigns").blame_line{full=true}<CR>')
-    map("n", "<leader>hs", '<cmd>lua require("gitsigns").stage_hunk()<CR>')
-    map("n", "<leader>hu", '<cmd>lua require("gitsigns").undo_stage_hunk()<CR>')
-    map("n", "<leader>hp", '<cmd>lua require("gitsigns").preview_hunk()<CR>')
-    map("n", "<leader>hr", '<cmd>lua require("gitsigns").reset_hunk()<CR>')
+    local wk = require("which-key")
+    wk.register({
+      ["<leader>"] = {
+        h = {
+          name = "Gitsigns",
+          b = { "<cmd>lua require('gitsigns').blame_line{full=true}<CR>", "Blame line" },
+          s = { "<cmd>lua require('gitsigns').stage_hunk()<CR>", "Stage hunk" },
+          u = { "<cmd>lua require('gitsigns').undo_stage_hunk()<CR>", "Undo stage hunk" },
+          p = { "<cmd>lua require('gitsigns').preview_hunk()<CR>", "Preview hunk" },
+          r = { "<cmd>lua require('gitsigns').reset_hunk()<CR>", "Reset hunk" },
+        },
+      },
+      ["]c"] = { "<cmd>lua require('gitsigns').next_hunk()<CR>", "Next hunk" },
+      ["[c"] = { "<cmd>lua require('gitsigns').prev_hunk()<CR>", "Previous hunk" },
+    }, {
+      buffer = bufnr,
+    })
   end,
 })
 require("colorizer").setup()
+
+require("telescope").setup({
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_cursor(),
+    },
+  },
+})
+require("telescope").load_extension("ui-select")
 
 require("toggleterm").setup({
   open_mapping = [[<c-\>]],
@@ -66,45 +80,40 @@ require("nvim-treesitter.configs").setup({
 local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
 ft_to_parser.bzl = "python"
 
-local nmap_opts = { noremap = true, silent = true }
-
 -- LSP
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...)
-    vim.api.nvim_buf_set_keymap(bufnr, ...)
-  end
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  --nmap_buf(bufnr, "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>")
-  --nmap_buf(bufnr, "gd", "<cmd>lua vim.lsp.buf.definition()<CR>")
-  --nmap_buf(bufnr, "K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-  --nmap_buf(bufnr, "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-  --nmap_buf(bufnr, "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-  --nmap_buf(bufnr, "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>")
-  --nmap_buf(bufnr, "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>")
-  --nmap_buf(bufnr, "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>")
-  --nmap_buf(bufnr, "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-  --nmap_buf(bufnr, "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-  --nmap_buf(bufnr, "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
-  --nmap_buf(bufnr, "gr", "<cmd>lua vim.lsp.buf.references()<CR>")
-
-  buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", nmap_opts)
-  buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", nmap_opts)
-  buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", nmap_opts)
-  buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", nmap_opts)
-  buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", nmap_opts)
-  buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", nmap_opts)
-  -- TODO maybe replace `gr` with trouble entirely
-  buf_set_keymap("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", nmap_opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<cr>", nmap_opts)
+  -- Buffer mappings
+  local wk = require("which-key")
+  wk.register({
+    g = {
+      name = "Go To",
+      D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration" },
+      d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition" },
+      i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation" }, -- TODO open in trouble?
+      -- TODO maybe replace `gr` with trouble entirely
+      r = { "<cmd>lua vim.lsp.buf.references()<cr>", "Go to references" },
+      R = { "<cmd>TroubleToggle lsp_references<cr>", "Open references in trouble" },
+    },
+    K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover menu" },
+    ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
+    ["<space>"] = {
+      name = "LSP",
+      w = {
+        name = "Workspace",
+        a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add workspace folder" },
+        r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove workspace folder" },
+        l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List workspace folders" },
+      },
+      D = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Type Definition" },
+      rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Actions" },
+      f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" },
+    },
+  }, {
+    buffer = bufnr,
+  })
 
   -- Format on save
   if client.resolved_capabilities.document_formatting then
@@ -117,52 +126,54 @@ local on_attach = function(client, bufnr)
   end
 end
 
-local lsp_common_settings = {
-  on_attach = on_attach,
-  flags = {
-    -- This will be the default in neovim 0.7+
-    debounce_text_changes = 150,
-  },
-}
-local lspconfig = require("lspconfig")
--- rust-tools sets up the `rust_analyzer` lsp with the lsp settings under `server`
-require("rust-tools").setup({
-  server = lsp_common_settings,
-})
--- Lua
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-lspconfig["sumneko_lua"].setup({
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  },
-  settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
+-- Configure servers installed by lsp-installer
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+  local opts = {
+    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
     },
-  },
-})
+  }
 
-lspconfig["gopls"].setup({
-  cmd = { "gopls", "-remote=auto" },
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  },
-})
-
-lspconfig["jsonnet_ls"].setup({})
+  if server.name == "rust_analyzer" then
+    local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.0/"
+    local codelldb_path = extension_path .. "adapter/codelldb"
+    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+    require("rust-tools").setup({
+      server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
+      dap = {
+        adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+      },
+    })
+    server:attach_buffers()
+  else
+    if server.name == "sumneko_lua" then
+      local runtime_path = vim.split(package.path, ";")
+      table.insert(runtime_path, "lua/?.lua")
+      table.insert(runtime_path, "lua/?/init.lua")
+      opts.settings = {
+        Lua = {
+          runtime = {
+            version = "LuaJIT",
+            path = runtime_path,
+          },
+          diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file("", true),
+          },
+        },
+      }
+    end
+    if server.name == "gopls" then
+      opts.cmd = { "gopls", "-remote=auto" }
+    end
+    server:setup(opts)
+  end
+end)
 
 -- null-ls
 local null_ls = require("null-ls")
@@ -181,6 +192,9 @@ null_ls.setup({
   diagnostics_format = "[#{c}] #{m} (#{s})",
   on_attach = on_attach,
 })
+
+-- Debugging
+require("dapui").setup()
 
 -- nvim-cmp
 local cmp = require("cmp")

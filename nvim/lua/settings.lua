@@ -22,6 +22,9 @@ vim.opt.shiftwidth = tabwidth
 vim.opt.softtabstop = -1 -- When negative the value of 'shiftwidth' is used
 vim.opt.expandtab = true
 
+-- Reduce timeout to make which-key more responsive
+vim.opt.timeoutlen = 500
+
 --
 -- vim.cmd("highlight ColorColumn ctermbg=darkgrey")
 

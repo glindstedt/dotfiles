@@ -55,6 +55,12 @@ return require("packer").startup(function(use)
       require("trouble").setup({})
     end,
   })
+  use({
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup({})
+    end,
+  })
 
   use("lukas-reineke/indent-blankline.nvim")
   use({
@@ -73,10 +79,13 @@ return require("packer").startup(function(use)
       "kyazdani42/nvim-web-devicons",
     },
   })
+  -- Use telescope for ui-select
+  use("nvim-telescope/telescope-ui-select.nvim")
   use("akinsho/toggleterm.nvim")
 
   -- Basic LSP stuff
   use("neovim/nvim-lspconfig")
+  use("williamboman/nvim-lsp-installer")
 
   -- Completion
   use({
@@ -123,6 +132,14 @@ return require("packer").startup(function(use)
     config = function()
       require("crates").setup()
     end,
+  })
+
+  -- Debugging
+  use({
+    "rcarriga/nvim-dap-ui",
+    requires = {
+      "mfussenegger/nvim-dap",
+    },
   })
 
   -- neorg
