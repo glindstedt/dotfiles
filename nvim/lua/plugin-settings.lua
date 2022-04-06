@@ -181,16 +181,16 @@ local null_ls = require("null-ls")
 
 null_ls.setup({
   sources = {
-    null_ls.builtins.formatting.stylua, -- Lua
-    null_ls.builtins.formatting.buildifier, -- Bazel
-    null_ls.builtins.formatting.fish_indent, -- Fish
-
-    null_ls.builtins.diagnostics.shellcheck, -- Bash
-    null_ls.builtins.code_actions.shellcheck, -- Bash
     null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.completion.luasnip,
-
-    --null_ls.builtins.completion.spell,
+    null_ls.builtins.diagnostics.buildifier,
+    null_ls.builtins.diagnostics.fish,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.formatting.buildifier,
+    null_ls.builtins.formatting.fish_indent,
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.hover.dictionary,
   },
   diagnostics_format = "[#{c}] #{m} (#{s})",
   on_attach = on_attach,
