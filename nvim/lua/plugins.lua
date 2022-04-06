@@ -106,6 +106,7 @@ return require("packer").startup(function(use)
       "neovim/nvim-lspconfig",
     },
   })
+  use("hrsh7th/cmp-cmdline")
 
   -- Snippets library
   use("rafamadriz/friendly-snippets")

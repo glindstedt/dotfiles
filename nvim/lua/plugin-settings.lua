@@ -92,10 +92,9 @@ local on_attach = function(client, bufnr)
       name = "Go To",
       D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Go to declaration" },
       d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Go to definition" },
-      i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation" }, -- TODO open in trouble?
-      -- TODO maybe replace `gr` with trouble entirely
-      r = { "<cmd>lua vim.lsp.buf.references()<cr>", "Go to references" },
-      R = { "<cmd>TroubleToggle lsp_references<cr>", "Open references in trouble" },
+      i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Go to implementation" },
+      -- r = { "<cmd>lua vim.lsp.buf.references()<cr>", "Go to references" },
+      r = { "<cmd>TroubleToggle lsp_references<cr>", "Go to references" },
     },
     K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover menu" },
     ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
@@ -128,14 +127,16 @@ local on_attach = function(client, bufnr)
 end
 
 -- Configure servers installed by lsp-installer
-local lsp_installer = require("nvim-lsp-installer")
-lsp_installer.on_server_ready(function(server)
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require("nvim-lsp-installer").on_server_ready(function(server)
+  local util = require("lspconfig.util")
   local opts = {
     on_attach = on_attach,
     flags = {
       -- This will be the default in neovim 0.7+
       debounce_text_changes = 150,
     },
+    capabilities = capabilities,
   }
 
   if server.name == "rust_analyzer" then
@@ -201,29 +202,53 @@ require("dapui").setup()
 
 -- nvim-cmp
 local cmp = require("cmp")
+local luasnip = require("luasnip")
 
 cmp.setup({
   mapping = {
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+    -- Integration with luasnip, use Tab/Shift-Tab to jump between snippet
+    -- insert locations
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
   },
-  --view = {
-  --entries = { name = "wildmenu", separator = "|" },
-  --entries = "native",
-  --},
-  experimental = {
-    --native_menu = true,
-    --ghost_text = true,
-  },
-  sources = {
+  sources = cmp.config.sources({
     { name = "nvim_lsp" },
-    { name = "buffer" },
     { name = "luasnip" },
-  },
+  }, {
+    -- Fallback to buffer
+    { name = "buffer" },
+  }),
   snippet = {
     expand = function(args)
       require("luasnip").lsp_expand(args.body)
     end,
   },
+})
+
+cmp.setup.cmdline(":", {
+  sources = cmp.config.sources({
+    { name = "path" },
+  }, {
+    { name = "cmdline" },
+  }),
+})
+
+cmp.setup.cmdline("/", {
+  sources = { { name = "buffer" } },
 })
 
 -- luasnip
