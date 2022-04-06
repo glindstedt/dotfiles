@@ -107,9 +107,12 @@ return require("packer").startup(function(use)
     },
   })
 
+  -- Snippets library
+  use("rafamadriz/friendly-snippets")
   -- Snippet engine
   use("L3MON4D3/LuaSnip")
   use("saadparwaiz1/cmp_luasnip")
+  use("benfowler/telescope-luasnip.nvim")
 
   -- Treesitter
   use({

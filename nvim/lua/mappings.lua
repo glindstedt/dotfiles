@@ -52,6 +52,7 @@ wk.register({
       h = { "<cmd>Telescope help_tags<cr>", "Find help tags" },
       p = { "<cmd>lua require('telescope.builtin').planets{}<cr>", "Find planets" },
       n = { "<cmd>Telescope notify<cr>", "Find notifications" },
+      s = { "<cmd>Telescope luasnip<cr>", "Find snippets" },
     },
     n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
   },

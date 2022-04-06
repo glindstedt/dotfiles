@@ -59,6 +59,7 @@ require("telescope").setup({
   },
 })
 require("telescope").load_extension("ui-select")
+require("telescope").load_extension("luasnip")
 
 require("toggleterm").setup({
   open_mapping = [[<c-\>]],
@@ -186,6 +187,8 @@ null_ls.setup({
 
     null_ls.builtins.diagnostics.shellcheck, -- Bash
     null_ls.builtins.code_actions.shellcheck, -- Bash
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.completion.luasnip,
 
     --null_ls.builtins.completion.spell,
   },
