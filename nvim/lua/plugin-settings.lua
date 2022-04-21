@@ -72,7 +72,7 @@ require("toggleterm").setup({
 
 -- Treesitter
 require("nvim-treesitter.configs").setup({
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true,
   },
@@ -132,10 +132,6 @@ require("nvim-lsp-installer").on_server_ready(function(server)
   local util = require("lspconfig.util")
   local opts = {
     on_attach = on_attach,
-    flags = {
-      -- This will be the default in neovim 0.7+
-      debounce_text_changes = 150,
-    },
     capabilities = capabilities,
   }
 
@@ -205,7 +201,7 @@ local cmp = require("cmp")
 local luasnip = require("luasnip")
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
     -- Integration with luasnip, use Tab/Shift-Tab to jump between snippet
@@ -224,7 +220,7 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-  },
+  }),
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "luasnip" },
