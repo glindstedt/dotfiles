@@ -3,11 +3,6 @@
 vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
 
 -- Nightfox
---local nightfox = require("nightfox")
---nightfox.setup({
---  fox = "nightfox",
---})
---nightfox.load()
 vim.cmd("colorscheme nightfox")
 
 -- Lualine
@@ -60,6 +55,10 @@ require("telescope").setup({
 })
 require("telescope").load_extension("ui-select")
 require("telescope").load_extension("luasnip")
+require("telescope").load_extension("notify")
+
+-- Get notifications via nvim-notify
+vim.notify = require("notify")
 
 require("toggleterm").setup({
   open_mapping = [[<c-\>]],
@@ -117,45 +116,45 @@ local on_attach = function(client, bufnr)
 
   -- Format on save
   if client.resolved_capabilities.document_formatting then
-    vim.cmd([[
-        augroup LspFormatting
-            autocmd! * <buffer>
-            autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        augroup END
-        ]])
+    local group = vim.api.nvim_create_augroup("LspFormatting", { clear = false })
+    vim.api.nvim_clear_autocmds({ buffer = 0, group = group }) -- clear for current buffer only
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = group,
+      buffer = 0,
+      callback = vim.lsp.buf.formatting_seq_sync,
+    })
   end
 end
 
 -- Configure servers installed by lsp-installer
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-require("nvim-lsp-installer").on_server_ready(function(server)
-  local util = require("lspconfig.util")
-  local opts = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+local lspconfig = require("lspconfig")
+lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
 
-  if server.name == "rust_analyzer" then
-    local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.0/"
-    local codelldb_path = extension_path .. "adapter/codelldb"
-    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-    require("rust-tools").setup({
-      server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
-      dap = {
-        adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-      },
-    })
-    server:attach_buffers()
-  else
-    if server.name == "sumneko_lua" then
-      local runtime_path = vim.split(package.path, ";")
-      table.insert(runtime_path, "lua/?.lua")
-      table.insert(runtime_path, "lua/?/init.lua")
-      opts.settings = {
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = { "bashls", "sumneko_lua" },
+})
+require("mason-lspconfig").setup_handlers({
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function(server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup({})
+  end,
+  ["sumneko_lua"] = function()
+    local lua_runtime_path = vim.split(package.path, ";")
+    table.insert(lua_runtime_path, "lua/?.lua")
+    table.insert(lua_runtime_path, "lua/?/init.lua")
+    lspconfig.sumneko_lua.setup({
+      settings = {
         Lua = {
           runtime = {
             version = "LuaJIT",
-            path = runtime_path,
+            path = lua_runtime_path,
           },
           diagnostics = {
             globals = { "vim" },
@@ -164,21 +163,47 @@ require("nvim-lsp-installer").on_server_ready(function(server)
             library = vim.api.nvim_get_runtime_file("", true),
           },
         },
-      }
-    end
-    if server.name == "gopls" then
-      opts.cmd = { "gopls", "-remote=auto" }
-    end
-    server:setup(opts)
-  end
-end)
+      },
+    })
+  end,
+  ["gopls"] = function()
+    lspconfig.gopls.setup({
+      cmd = { "gopls", "-remote=auto" },
+      settings = {
+        gopls = {
+          gofumpt = true,
+        },
+      },
+    })
+  end,
+  ["dockerls"] = function()
+    -- Extend root pattern with .git
+    lspconfig.dockerls.setup({
+      root_dir = lspconfig.util.root_pattern("Dockerfile", ".git"),
+    })
+  end,
+})
+
+-- rust-tools
+local rust_tools_opts = {}
+local codelldb_pkg = require("mason-registry").get_package("codelldb")
+if codelldb_pkg:is_installed() then
+  local install_path = codelldb_pkg:get_install_path()
+  local codelldb_path = install_path .. "/extension/adapter/codelldb"
+  local liblldb_path = install_path .. "/extension/lldb/lib/liblldb.so"
+  rust_tools_opts = {
+    dap = {
+      adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+    },
+  }
+end
+require("rust-tools").setup(rust_tools_opts)
 
 -- null-ls
 local null_ls = require("null-ls")
 
 null_ls.setup({
   sources = {
-    null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.completion.luasnip,
     null_ls.builtins.diagnostics.buildifier,
@@ -202,7 +227,10 @@ local luasnip = require("luasnip")
 
 cmp.setup({
   mapping = cmp.mapping.preset.insert({
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    ["<C-u>"] = cmp.mapping.scroll_docs(-8),
+    ["<C-d>"] = cmp.mapping.scroll_docs(8),
+    ["<C-Space>"] = cmp.mapping.complete({}),
 
     -- Integration with luasnip, use Tab/Shift-Tab to jump between snippet
     -- insert locations
@@ -233,9 +261,21 @@ cmp.setup({
       require("luasnip").lsp_expand(args.body)
     end,
   },
+  formatting = {
+    format = require("lspkind").cmp_format({
+      mode = "symbol_text",
+      menu = {
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        cmdline = "[CmdLine]",
+      },
+    }),
+  },
 })
 
 cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = "path" },
   }, {
@@ -244,6 +284,7 @@ cmp.setup.cmdline(":", {
 })
 
 cmp.setup.cmdline("/", {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = { { name = "buffer" } },
 })
 

@@ -25,39 +25,15 @@ vim.opt.expandtab = true
 -- Reduce timeout to make which-key more responsive
 vim.opt.timeoutlen = 500
 
---
--- vim.cmd("highlight ColorColumn ctermbg=darkgrey")
-
--- TODO evaluate if this is what I want
--- Set completeopt to have a better completion experience
--- :help completeopt
--- menuone: popup even when there's only one match
--- noinsert: Do not insert text until a selection is made
--- noselect: Do not select, force user to select one from the menu
---vim.o.completeopt = "menuone,noinsert,noselect"
---vim.o.completeopt = "menu,menuone,noselect"
-
 -- Automatically compile packer when saving plugins.lua
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
-]])
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = vim.api.nvim_create_augroup("packer_user_config", {}),
+  pattern = { "plugins.lua" },
+  command = "source <afile> | PackerCompile",
+})
 
 -- Folding
 -- Use treesitter as foldmethod
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
---vim.opt.foldlevel = 1
 vim.opt.foldminlines = 20
-
--- Detect dockerfile for treesitter
-vim.cmd([[
-  augroup filetype_docker
-    autocmd!
-    autocmd BufRead,BufNewFile [Dd]ockerfile set filetype=dockerfile
-    autocmd BufRead,BufNewFile [Dd]ockerfile* set filetype=dockerfile
-    autocmd BufRead,BufNewFile *.[Dd]ockerfile set filetype=dockerfile
-  augroup end
-]])

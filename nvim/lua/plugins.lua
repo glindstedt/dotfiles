@@ -93,8 +93,9 @@ return require("packer").startup(function(use)
   use("akinsho/toggleterm.nvim")
 
   -- Basic LSP stuff
+  use("williamboman/mason.nvim")
+  use("williamboman/mason-lspconfig.nvim")
   use("neovim/nvim-lspconfig")
-  use("williamboman/nvim-lsp-installer")
 
   -- Completion
   use({
@@ -102,8 +103,8 @@ return require("packer").startup(function(use)
     requires = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/vim-vsnip",
       "neovim/nvim-lspconfig",
+      "onsails/lspkind.nvim",
     },
   })
   use("hrsh7th/cmp-cmdline")
@@ -133,6 +134,8 @@ return require("packer").startup(function(use)
 
   use({
     "simrat39/rust-tools.nvim",
+    -- TODO remove once merged
+    branch = "modularize_and_inlay_rewrite",
     requires = {
       "nvim-lua/plenary.nvim",
       "mfussenegger/nvim-dap",
@@ -140,7 +143,6 @@ return require("packer").startup(function(use)
   })
   use({
     "saecki/crates.nvim",
-    tag = "v0.1.0",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("crates").setup()

@@ -55,6 +55,17 @@ wk.register({
       s = { "<cmd>Telescope luasnip<cr>", "Find snippets" },
     },
     n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
+    d = {
+      name = "Debug",
+      d = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle debug UI" },
+      b = { "<cmd>lua require('dap').toggle_breakpoint()<cr>", "Toggle breakpoint" },
+      c = { "<cmd>lua require('dap').continue()<cr>", "Continue" },
+      o = { "<cmd>lua require('dap').step_over()<cr>", "Step Over" },
+      i = { "<cmd>lua require('dap').step_into()<cr>", "Step Into" },
+      u = { "<cmd>lua require('dap').step_out()<cr>", "Step Out" },
+      r = { "<cmd>lua require('dap').repl.open()<cr>", "Open Repl" },
+      l = { "<cmd>lua require('dap').run_last()<cr>", "Run Last" },
+    },
   },
   ["<space>"] = {
     e = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Open diagnoztics float" },
