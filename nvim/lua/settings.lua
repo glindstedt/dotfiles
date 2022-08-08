@@ -1,3 +1,7 @@
+-- Experimental, see https://neovim.io/news/#filetypelua
+vim.g.did_load_filetypes = 0
+vim.g.do_filetype_lua = 1
+
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 

@@ -48,8 +48,12 @@ return require("packer").startup(function(use)
   use("editorconfig/editorconfig-vim") -- Detect .editorconfig
   use("tpope/vim-unimpaired") -- Useful bindings
 
-  -- UI
+  -- Colorschemes
   use("EdenEast/nightfox.nvim")
+  use("sainnhe/everforest")
+  use("rebelot/kanagawa.nvim")
+  use("catppuccin/nvim")
+  -- UI
   use("nvim-lualine/lualine.nvim")
   use({
     "kyazdani42/nvim-tree.lua",
@@ -69,6 +73,10 @@ return require("packer").startup(function(use)
     config = function()
       require("which-key").setup({})
     end,
+  })
+  use({
+    "romgrk/barbar.nvim",
+    requires = { "kyazdani42/nvim-web-devicons" },
   })
 
   use("lukas-reineke/indent-blankline.nvim")
@@ -160,8 +168,18 @@ return require("packer").startup(function(use)
   -- neorg
   use({
     "nvim-neorg/neorg",
-    -- tag = "latest", (see below)
-    requires = "nvim-lua/plenary.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-neorg/neorg-telescope",
+    },
+  })
+  use({
+    -- "~/Code/telescope-bookmarks.nvim",
+    "dhruvmanila/telescope-bookmarks.nvim",
+    -- Uncomment if the selected browser is Firefox or buku
+    requires = {
+      "tami5/sqlite.lua",
+    },
   })
 
   if packer_bootstrapped then

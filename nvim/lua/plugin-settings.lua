@@ -2,8 +2,12 @@
 -- https://github.com/editorconfig/editorconfig-vim#excluded-patterns
 vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
 
--- Nightfox
-vim.cmd("colorscheme nightfox")
+-- Colorschemes
+-- vim.cmd("colorscheme nightfox")
+-- vim.cmd("colorscheme kanagawa")
+-- vim.cmd("colorscheme everforest")
+vim.g.catppuccin_flavour = "macchiato"
+vim.cmd("colorscheme catppuccin")
 
 -- Lualine
 require("lualine").setup({
@@ -19,6 +23,20 @@ require("nvim-tree").setup({
   },
 })
 vim.g.nvim_tree_respect_buf_cwd = 1
+
+-- barbar <-> nvim-tree
+local nt_api = require("nvim-tree.api")
+local bufferline_state = require("bufferline.state")
+
+nt_api.events.subscribe(nt_api.events.Event.TreeOpen, function()
+  bufferline_state.set_offset(vim.api.nvim_win_get_width(0))
+end)
+nt_api.events.subscribe(nt_api.events.Event.Resize, function(size)
+  bufferline_state.set_offset(size)
+end)
+nt_api.events.subscribe(nt_api.events.Event.TreeClose, function()
+  bufferline_state.set_offset(0)
+end)
 
 require("indent_blankline").setup({
   show_current_context = true,
@@ -47,15 +65,23 @@ require("gitsigns").setup({
 require("colorizer").setup()
 
 require("telescope").setup({
+  defaults = {
+    prompt_prefix = "🔍",
+  },
   extensions = {
     ["ui-select"] = {
       require("telescope.themes").get_cursor(),
+    },
+    ["bookmarks"] = {
+      selected_browser = "firefox",
+      firefox_profile_name = "default-release",
     },
   },
 })
 require("telescope").load_extension("ui-select")
 require("telescope").load_extension("luasnip")
 require("telescope").load_extension("notify")
+require("telescope").load_extension("bookmarks")
 
 -- Get notifications via nvim-notify
 vim.notify = require("notify")
@@ -180,6 +206,15 @@ require("mason-lspconfig").setup_handlers({
     -- Extend root pattern with .git
     lspconfig.dockerls.setup({
       root_dir = lspconfig.util.root_pattern("Dockerfile", ".git"),
+      settings = {
+        docker = {
+          languageserver = {
+            formatter = {
+              ignoreMultilineInstructions = true,
+            },
+          },
+        },
+      },
     })
   end,
 })

@@ -53,6 +53,9 @@ wk.register({
       p = { "<cmd>lua require('telescope.builtin').planets{}<cr>", "Find planets" },
       n = { "<cmd>Telescope notify<cr>", "Find notifications" },
       s = { "<cmd>Telescope luasnip<cr>", "Find snippets" },
+      c = { "<cmd>Telescope colorscheme<cr>", "Switch colorscheme" },
+      m = { "<cmd>Telescope man_pages<cr>", "Find man pages" },
+      t = { "<cmd>Telescope builtin<cr>", "Find builtin pickers" },
     },
     n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
     d = {
@@ -100,6 +103,22 @@ wk.register({
     ["<"] = { "Uncomment" }, -- TODO this label doesn't work for some reason
   },
 }, { mode = "x" })
+
+-- barbar
+nmap("<A-,>", "<cmd>BufferPrevious<cr>")
+nmap("<A-.>", "<cmd>BufferNext<cr>")
+nmap("<A-<>", "<cmd>BufferMovePrevious<cr>")
+nmap("<A->>", "<cmd>BufferMoveNext<cr>")
+nmap("<A-1>", "<cmd>BufferGoto 1<cr>")
+nmap("<A-2>", "<cmd>BufferGoto 2<cr>")
+nmap("<A-3>", "<cmd>BufferGoto 3<cr>")
+nmap("<A-4>", "<cmd>BufferGoto 4<cr>")
+nmap("<A-5>", "<cmd>BufferGoto 5<cr>")
+nmap("<A-6>", "<cmd>BufferGoto 6<cr>")
+nmap("<A-7>", "<cmd>BufferGoto 7<cr>")
+nmap("<A-8>", "<cmd>BufferGoto 8<cr>")
+nmap("<A-9>", "<cmd>BufferLast<cr>")
+nmap("<A-c>", "<cmd>BufferClose<cr>")
 
 -- Window Control
 nmap("<A-->", "<C-w>-")
