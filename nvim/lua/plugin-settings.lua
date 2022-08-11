@@ -29,7 +29,7 @@ local nt_api = require("nvim-tree.api")
 local bufferline_state = require("bufferline.state")
 
 nt_api.events.subscribe(nt_api.events.Event.TreeOpen, function()
-  bufferline_state.set_offset(vim.api.nvim_win_get_width(0))
+  bufferline_state.set_offset(require("nvim-tree.view").View.width)
 end)
 nt_api.events.subscribe(nt_api.events.Event.Resize, function(size)
   bufferline_state.set_offset(size)
