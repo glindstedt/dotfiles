@@ -95,7 +95,19 @@ require("toggleterm").setup({
   },
 })
 
+-- set comment string for cue filetype
+require("Comment.ft").set("cue", "//%s")
+
 -- Treesitter
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.cue = {
+  filetype = "cue",
+  install_info = {
+    url = "https://github.com/eonpatapon/tree-sitter-cue",
+    files = { "src/parser.c", "src/scanner.c" },
+    branch = "main",
+  },
+}
 require("nvim-treesitter.configs").setup({
   ensure_installed = "all",
   highlight = {
@@ -141,7 +153,7 @@ local on_attach = function(client, bufnr)
   })
 
   -- Format on save
-  if client.resolved_capabilities.document_formatting then
+  if client.server_capabilities.documentFormattingProvider then
     local group = vim.api.nvim_create_augroup("LspFormatting", { clear = false })
     vim.api.nvim_clear_autocmds({ buffer = 0, group = group }) -- clear for current buffer only
     vim.api.nvim_create_autocmd("BufWritePre", {

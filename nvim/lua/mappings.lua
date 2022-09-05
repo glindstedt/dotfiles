@@ -57,7 +57,12 @@ wk.register({
       m = { "<cmd>Telescope man_pages<cr>", "Find man pages" },
       t = { "<cmd>Telescope builtin<cr>", "Find builtin pickers" },
     },
-    n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
+    n = {
+      name = "Nvim-Tree",
+      n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
+      g = { "<cmd>NvimTreeFindFile<cr>", "Find file in nvim-tree" },
+      c = { "<cmd>NvimTreeClose<cr>", "Close nvim-tree" },
+    },
     d = {
       name = "Debug",
       d = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle debug UI" },
@@ -120,9 +125,12 @@ nmap("<A-8>", "<cmd>BufferGoto 8<cr>")
 nmap("<A-9>", "<cmd>BufferLast<cr>")
 nmap("<A-c>", "<cmd>BufferClose<cr>")
 
+-- Open folds with double click
+nmap("<2-LeftMouse>", "za")
+
 -- Window Control
 nmap("<A-->", "<C-w>-")
 nmap("<A-+>", "<C-w>+")
-nmap("<A-<>", "<C-w><")
-nmap("<A->>", "<C-w>>")
+-- nmap("<A-<>", "<C-w><")
+-- nmap("<A->>", "<C-w>>")
 nmap("<A-=>", "<C-w>=")
