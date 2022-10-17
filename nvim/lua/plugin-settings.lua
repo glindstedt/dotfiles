@@ -41,27 +41,6 @@ end)
 require("indent_blankline").setup({
   show_current_context = true,
 })
-require("gitsigns").setup({
-  on_attach = function(bufnr)
-    local wk = require("which-key")
-    wk.register({
-      ["<leader>"] = {
-        h = {
-          name = "Gitsigns",
-          b = { "<cmd>lua require('gitsigns').blame_line{full=true}<CR>", "Blame line" },
-          s = { "<cmd>lua require('gitsigns').stage_hunk()<CR>", "Stage hunk" },
-          u = { "<cmd>lua require('gitsigns').undo_stage_hunk()<CR>", "Undo stage hunk" },
-          p = { "<cmd>lua require('gitsigns').preview_hunk()<CR>", "Preview hunk" },
-          r = { "<cmd>lua require('gitsigns').reset_hunk()<CR>", "Reset hunk" },
-        },
-      },
-      ["]c"] = { "<cmd>lua require('gitsigns').next_hunk()<CR>", "Next hunk" },
-      ["[c"] = { "<cmd>lua require('gitsigns').prev_hunk()<CR>", "Previous hunk" },
-    }, {
-      buffer = bufnr,
-    })
-  end,
-})
 require("colorizer").setup()
 
 require("telescope").setup({
@@ -94,9 +73,48 @@ require("toggleterm").setup({
     winblend = 3,
   },
 })
+local Terminal = require("toggleterm.terminal").Terminal
+local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+
+function _lazygit_toggle()
+  lazygit:toggle()
+end
+
+local wk = require("which-key")
+wk.register({
+  ["<leader>"] = {
+    h = {
+      name = "Git",
+      l = { "<cmd>lua _lazygit_toggle()<cr>", "lazygit" },
+    },
+  },
+})
+
+require("gitsigns").setup({
+  on_attach = function(bufnr)
+    wk.register({
+      ["<leader>"] = {
+        h = {
+          name = "Git",
+          b = { "<cmd>lua require('gitsigns').blame_line{full=true}<CR>", "Blame line" },
+          s = { "<cmd>lua require('gitsigns').stage_hunk()<CR>", "Stage hunk" },
+          u = { "<cmd>lua require('gitsigns').undo_stage_hunk()<CR>", "Undo stage hunk" },
+          p = { "<cmd>lua require('gitsigns').preview_hunk()<CR>", "Preview hunk" },
+          r = { "<cmd>lua require('gitsigns').reset_hunk()<CR>", "Reset hunk" },
+        },
+      },
+      ["]c"] = { "<cmd>lua require('gitsigns').next_hunk()<CR>", "Next hunk" },
+      ["[c"] = { "<cmd>lua require('gitsigns').prev_hunk()<CR>", "Previous hunk" },
+    }, {
+      buffer = bufnr,
+    })
+  end,
+})
 
 -- set comment string for cue filetype
 require("Comment.ft").set("cue", "//%s")
+
+require("leap").add_default_mappings()
 
 -- Treesitter
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -118,12 +136,15 @@ require("nvim-treesitter.configs").setup({
 local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
 ft_to_parser.bzl = "python"
 
+local lsp_format = require("lsp-format")
+lsp_format.setup({})
+
 -- LSP
 local on_attach = function(client, bufnr)
+  lsp_format.on_attach(client)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- Buffer mappings
-  local wk = require("which-key")
   wk.register({
     g = {
       name = "Go To",
@@ -151,21 +172,10 @@ local on_attach = function(client, bufnr)
   }, {
     buffer = bufnr,
   })
-
-  -- Format on save
-  if client.server_capabilities.documentFormattingProvider then
-    local group = vim.api.nvim_create_augroup("LspFormatting", { clear = false })
-    vim.api.nvim_clear_autocmds({ buffer = 0, group = group }) -- clear for current buffer only
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = group,
-      buffer = 0,
-      callback = vim.lsp.buf.formatting_seq_sync,
-    })
-  end
 end
 
 -- Configure servers installed by lsp-installer
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
   on_attach = on_attach,
@@ -209,6 +219,12 @@ require("mason-lspconfig").setup_handlers({
       cmd = { "gopls", "-remote=auto" },
       settings = {
         gopls = {
+          directoryFilters = {
+            "-**/bazel-bin",
+            "-**/bazel-out",
+            "-**/bazel-src",
+            "-**/bazel-testlogs",
+          },
           gofumpt = true,
         },
       },

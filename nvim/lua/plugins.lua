@@ -37,11 +37,7 @@ return require("packer").startup(function(use)
   use({
     "numToStr/Comment.nvim",
     config = function()
-      require("Comment").setup({
-        mappings = {
-          extended = true,
-        },
-      })
+      require("Comment").setup({})
     end,
   })
   use("tpope/vim-sleuth") -- Automatically detect indentation
@@ -100,10 +96,16 @@ return require("packer").startup(function(use)
   use("nvim-telescope/telescope-ui-select.nvim")
   use("akinsho/toggleterm.nvim")
 
+  use({
+    "ggandor/leap.nvim",
+    requires = { "tpope/vim-repeat" },
+  })
+
   -- Basic LSP stuff
   use("williamboman/mason.nvim")
   use("williamboman/mason-lspconfig.nvim")
   use("neovim/nvim-lspconfig")
+  use("lukas-reineke/lsp-format.nvim") -- format on save
 
   -- Completion
   use({
