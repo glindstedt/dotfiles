@@ -26,16 +26,16 @@ vim.g.nvim_tree_respect_buf_cwd = 1
 
 -- barbar <-> nvim-tree
 local nt_api = require("nvim-tree.api")
-local bufferline_state = require("bufferline.state")
+local bl_api = require("bufferline.api")
 
 nt_api.events.subscribe(nt_api.events.Event.TreeOpen, function()
-  bufferline_state.set_offset(require("nvim-tree.view").View.width)
+  bl_api.set_offset(require("nvim-tree.view").View.width)
 end)
 nt_api.events.subscribe(nt_api.events.Event.Resize, function(size)
-  bufferline_state.set_offset(size)
+  bl_api.set_offset(size)
 end)
 nt_api.events.subscribe(nt_api.events.Event.TreeClose, function()
-  bufferline_state.set_offset(0)
+  bl_api.set_offset(0)
 end)
 
 require("indent_blankline").setup({
