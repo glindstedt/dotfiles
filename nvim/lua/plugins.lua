@@ -1,7 +1,7 @@
 -- {{{ Bootstrap packer.nvim
 local packer_repo = "wbthomason/packer.nvim"
 
-local packer_bootstrapped = false
+local packer_bootstrapped = nil
 local function maybe_bootstrap_packer()
   local fn = vim.fn
 
@@ -100,12 +100,25 @@ return require("packer").startup(function(use)
     "ggandor/leap.nvim",
     requires = { "tpope/vim-repeat" },
   })
+  use({
+    "goolord/alpha-nvim",
+    config = function()
+      require("alpha").setup(require("alpha.themes.theta").config)
+    end,
+  })
 
   -- Basic LSP stuff
   use("williamboman/mason.nvim")
   use("williamboman/mason-lspconfig.nvim")
   use("neovim/nvim-lspconfig")
   use("lukas-reineke/lsp-format.nvim") -- format on save
+  use({
+    -- Nice LSP progress UI in bottom right corner
+    "j-hui/fidget.nvim",
+    config = function()
+      require("fidget").setup({})
+    end,
+  })
 
   -- Completion
   use({
@@ -140,7 +153,9 @@ return require("packer").startup(function(use)
 
   -- Language Support
   use("google/vim-jsonnet")
-  use("fatih/vim-go")
+
+  use("Olical/conjure")
+  use("PaterJason/cmp-conjure")
 
   use({
     "simrat39/rust-tools.nvim",
@@ -181,8 +196,23 @@ return require("packer").startup(function(use)
       "tami5/sqlite.lua",
     },
   })
+  use("stevearc/overseer.nvim")
+  use({
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
 
-  if packer_bootstrapped then
+      -- Adapters
+      "nvim-neotest/neotest-go",
+      "rouge8/neotest-rust",
+    },
+  })
+  use("eandrju/cellular-automaton.nvim")
+  use("folke/neodev.nvim")
+
+  if packer_bootstrapped ~= nil then
     require("packer").sync()
   end
 end)

@@ -1,32 +1,34 @@
 local wk = require("which-key")
 
-local function map(mode, shortcut, command, opts_override, bufnr)
-  local opts = {
-    noremap = true,
-    silent = true,
-  }
+-- Base level bindings
+-- barbar
+vim.keymap.set("n", "<A-,>", vim.cmd.BufferPrevious)
+vim.keymap.set("n", "<A-.>", vim.cmd.BufferNext)
+vim.keymap.set("n", "<A-<>", vim.cmd.BufferMovePrevious)
+vim.keymap.set("n", "<A->>", vim.cmd.BufferMoveNext)
+vim.keymap.set("n", "<A-1>", "<cmd>BufferGoto 1<cr>")
+vim.keymap.set("n", "<A-2>", "<cmd>BufferGoto 2<cr>")
+vim.keymap.set("n", "<A-3>", "<cmd>BufferGoto 3<cr>")
+vim.keymap.set("n", "<A-4>", "<cmd>BufferGoto 4<cr>")
+vim.keymap.set("n", "<A-5>", "<cmd>BufferGoto 5<cr>")
+vim.keymap.set("n", "<A-6>", "<cmd>BufferGoto 6<cr>")
+vim.keymap.set("n", "<A-7>", "<cmd>BufferGoto 7<cr>")
+vim.keymap.set("n", "<A-8>", "<cmd>BufferGoto 8<cr>")
+vim.keymap.set("n", "<A-9>", vim.cmd.BufferLast)
+vim.keymap.set("n", "<A-c>", vim.cmd.BufferClose)
 
-  if type(opts_override) == "table" then
-    for i, v in pairs(opts_override) do
-      opts[i] = v
-    end
-  end
+-- Window Control
+vim.keymap.set("n", "<A-->", "<C-w>-")
+vim.keymap.set("n", "<A-+>", "<C-w>+")
+vim.keymap.set("n", "<A-=>", "<C-w>=")
 
-  if bufnr ~= nil then
-    vim.api.nvim_buf_set_keymap(bufnr, mode, shortcut, command, opts)
-  else
-    vim.api.nvim_set_keymap(mode, shortcut, command, opts)
-  end
-end
+-- Move visual blocks of code magic
+vim.keymap.set("x", "J", ":m '>+1<cr>gv=gv")
+vim.keymap.set("x", "K", ":m '<-2<cr>gv=gv")
+-- Don't move cursor when justifying
+vim.keymap.set("n", "J", "mzJ`z")
 
-local function nmap(shortcut, command, opts)
-  map("n", shortcut, command, opts)
-end
-
-local function nmap_buf(bufnr, shortcut, command, opts)
-  map("n", shortcut, command, opts, bufnr)
-end
-
+-- Normal mode
 wk.register({
   ["<leader>"] = {
     m = {
@@ -63,6 +65,12 @@ wk.register({
       g = { "<cmd>NvimTreeFindFile<cr>", "Find file in nvim-tree" },
       c = { "<cmd>NvimTreeClose<cr>", "Close nvim-tree" },
     },
+    o = {
+      name = "Overseer",
+      i = { "<cmd>OverseerInfo<cr>", "Overseer Info" },
+      r = { "<cmd>OverseerRun<cr>", "Run Overseer Task" },
+      o = { "<cmd>OverseerToggle<cr>", "Toggle Overseer" },
+    },
     d = {
       name = "Debug",
       d = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle debug UI" },
@@ -73,6 +81,14 @@ wk.register({
       u = { "<cmd>lua require('dap').step_out()<cr>", "Step Out" },
       r = { "<cmd>lua require('dap').repl.open()<cr>", "Open Repl" },
       l = { "<cmd>lua require('dap').run_last()<cr>", "Run Last" },
+    },
+    t = {
+      name = "Neotest",
+      a = { "<cmd>lua require('neotest').run.attach()<cr>", "Attach to nearest test" },
+      t = { "<cmd>lua require('neotest').run.run()<cr>", "Run nearest test" },
+      d = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>", "Debug nearest test" },
+      s = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop nearest test" },
+      f = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Run all tests" },
     },
   },
   ["<space>"] = {
@@ -100,6 +116,7 @@ wk.register({
   },
 })
 
+-- Visual only mode
 wk.register({
   g = {
     ["c"] = { "Comment lines" },
@@ -108,29 +125,3 @@ wk.register({
     ["<"] = { "Uncomment" }, -- TODO this label doesn't work for some reason
   },
 }, { mode = "x" })
-
--- barbar
-nmap("<A-,>", "<cmd>BufferPrevious<cr>")
-nmap("<A-.>", "<cmd>BufferNext<cr>")
-nmap("<A-<>", "<cmd>BufferMovePrevious<cr>")
-nmap("<A->>", "<cmd>BufferMoveNext<cr>")
-nmap("<A-1>", "<cmd>BufferGoto 1<cr>")
-nmap("<A-2>", "<cmd>BufferGoto 2<cr>")
-nmap("<A-3>", "<cmd>BufferGoto 3<cr>")
-nmap("<A-4>", "<cmd>BufferGoto 4<cr>")
-nmap("<A-5>", "<cmd>BufferGoto 5<cr>")
-nmap("<A-6>", "<cmd>BufferGoto 6<cr>")
-nmap("<A-7>", "<cmd>BufferGoto 7<cr>")
-nmap("<A-8>", "<cmd>BufferGoto 8<cr>")
-nmap("<A-9>", "<cmd>BufferLast<cr>")
-nmap("<A-c>", "<cmd>BufferClose<cr>")
-
--- Open folds with double click
-nmap("<2-LeftMouse>", "za")
-
--- Window Control
-nmap("<A-->", "<C-w>-")
-nmap("<A-+>", "<C-w>+")
--- nmap("<A-<>", "<C-w><")
--- nmap("<A->>", "<C-w>>")
-nmap("<A-=>", "<C-w>=")

@@ -11,8 +11,8 @@ vim.cmd("colorscheme catppuccin")
 
 -- Lualine
 require("lualine").setup({
-  options = {
-    theme = "horizon",
+  sections = {
+    lualine_x = { "overseer" },
   },
 })
 
@@ -21,6 +21,7 @@ require("nvim-tree").setup({
   view = {
     width = 40,
   },
+  remove_keymaps = { "<C-e>" },
 })
 vim.g.nvim_tree_respect_buf_cwd = 1
 
@@ -46,6 +47,12 @@ require("colorizer").setup()
 require("telescope").setup({
   defaults = {
     prompt_prefix = "🔍",
+    mappings = {
+      i = {
+        ["<C-Down>"] = require("telescope.actions").cycle_history_next,
+        ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
+      },
+    },
   },
   extensions = {
     ["ui-select"] = {
@@ -76,7 +83,7 @@ require("toggleterm").setup({
 local Terminal = require("toggleterm.terminal").Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
 
-function _lazygit_toggle()
+function _LAZYGIT_TOGGLE()
   lazygit:toggle()
 end
 
@@ -85,7 +92,7 @@ wk.register({
   ["<leader>"] = {
     h = {
       name = "Git",
-      l = { "<cmd>lua _lazygit_toggle()<cr>", "lazygit" },
+      l = { "<cmd>lua _LAZYGIT_TOGGLE()<cr>", "lazygit" },
     },
   },
 })
@@ -137,7 +144,16 @@ local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
 ft_to_parser.bzl = "python"
 
 local lsp_format = require("lsp-format")
-lsp_format.setup({})
+lsp_format.setup({
+  cpp = {
+    -- stop clangd from auto formatting cpp files
+    exclude = { "clangd" },
+  },
+  proto = {
+    -- stop clangd from auto formatting proto files
+    exclude = { "clangd" },
+  },
+})
 
 -- LSP
 local on_attach = function(client, bufnr)
@@ -167,12 +183,20 @@ local on_attach = function(client, bufnr)
       D = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Type Definition" },
       rn = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
       ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Actions" },
-      f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" },
+      F = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "Format file" },
+      f = {
+        name = "Find",
+        d = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "Symbols in Document" },
+        w = { "<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Symbols in Workspace" },
+      },
     },
   }, {
     buffer = bufnr,
   })
 end
+
+-- IMPORTANT must be before lsp config
+require("neodev").setup({})
 
 -- Configure servers installed by lsp-installer
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -209,6 +233,8 @@ require("mason-lspconfig").setup_handlers({
           },
           workspace = {
             library = vim.api.nvim_get_runtime_file("", true),
+            -- https://github.com/LuaLS/lua-language-server/issues/679
+            checkThirdParty = false,
           },
         },
       },
@@ -261,6 +287,39 @@ if codelldb_pkg:is_installed() then
   }
 end
 require("rust-tools").setup(rust_tools_opts)
+
+-- overseer
+local overseer = require("overseer")
+overseer.setup({
+  templates = {
+    "builtin",
+  },
+  task_list = {
+    default_detail = 2,
+    direction = "right",
+  },
+  log = {
+    {
+      type = "notify",
+      level = vim.log.levels.DEBUG,
+    },
+  },
+})
+
+-- neotest
+require("neotest").setup({
+  adapters = {
+    require("neotest-go"),
+    require("neotest-rust"),
+  },
+  consumers = {
+    overseer = require("neotest.consumers.overseer"),
+  },
+})
+
+-- conjure
+-- disable doc_word mapping to not conflict with K for lsp in rust
+vim.g["conjure#mapping#doc_word"] = false
 
 -- null-ls
 local null_ls = require("null-ls")
@@ -315,6 +374,8 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     { name = "luasnip" },
+    { name = "neorg" },
+    { name = "conjure" },
   }, {
     -- Fallback to buffer
     { name = "buffer" },
@@ -332,6 +393,8 @@ cmp.setup({
         nvim_lsp = "[LSP]",
         luasnip = "[LuaSnip]",
         cmdline = "[CmdLine]",
+        neorg = "[Neorg]",
+        conjure = "[Conjure]",
       },
     }),
   },
@@ -369,5 +432,25 @@ require("neorg").setup({
     },
     ["core.norg.qol.toc"] = {},
     ["core.norg.concealer"] = {},
+    ["core.norg.completion"] = {
+      config = {
+        engine = "nvim-cmp",
+      },
+    },
+    ["core.norg.journal"] = {
+      config = {
+        workspace = "home",
+      },
+    },
+    ["core.integrations.telescope"] = {},
+    ["core.keybinds"] = {
+      config = {
+        hook = function(keybinds)
+          keybinds.map("norg", "n", "<localleader>ct", "<cmd>Neorg toggle-concealer<cr>")
+          keybinds.map_event("norg", "n", "<C-s>", "core.integrations.telescope.find_linkable")
+          keybinds.map_event("norg", "i", "<C-l>", "core.integrations.telescope.insert_link")
+        end,
+      },
+    },
   },
 })
