@@ -17,18 +17,23 @@ require("lualine").setup({
 })
 
 --nvim-tree
+local nt_api = require("nvim-tree.api")
+
+local on_attach_nvim_tree = function(bufnr)
+  nt_api.config.mappings.default_on_attach(bufnr)
+  vim.keymap.del("n", "<C-e>", { buffer = bufnr })
+end
+
 require("nvim-tree").setup({
   view = {
     width = 40,
   },
-  remove_keymaps = { "<C-e>" },
+  on_attach = on_attach_nvim_tree,
 })
 vim.g.nvim_tree_respect_buf_cwd = 1
 
 -- barbar <-> nvim-tree
-local nt_api = require("nvim-tree.api")
 local bl_api = require("bufferline.api")
-
 nt_api.events.subscribe(nt_api.events.Event.TreeOpen, function()
   bl_api.set_offset(require("nvim-tree.view").View.width)
 end)
@@ -208,7 +213,7 @@ lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_c
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "bashls", "sumneko_lua" },
+  ensure_installed = { "bashls", "lua_ls" },
 })
 require("mason-lspconfig").setup_handlers({
   -- The first entry (without a key) will be the default handler
@@ -217,11 +222,11 @@ require("mason-lspconfig").setup_handlers({
   function(server_name) -- default handler (optional)
     require("lspconfig")[server_name].setup({})
   end,
-  ["sumneko_lua"] = function()
-    local lua_runtime_path = vim.split(package.path, ";")
+  ["lua_ls"] = function()
+    local lua_runtime_path = vim.split(package.path, ";", {})
     table.insert(lua_runtime_path, "lua/?.lua")
     table.insert(lua_runtime_path, "lua/?/init.lua")
-    lspconfig.sumneko_lua.setup({
+    lspconfig.lua_ls.setup({
       settings = {
         Lua = {
           runtime = {
@@ -250,6 +255,7 @@ require("mason-lspconfig").setup_handlers({
             "-**/bazel-out",
             "-**/bazel-src",
             "-**/bazel-testlogs",
+            "-**/node_modules",
           },
           gofumpt = true,
         },
@@ -269,6 +275,12 @@ require("mason-lspconfig").setup_handlers({
           },
         },
       },
+    })
+  end,
+  ["clangd"] = function()
+    lspconfig.clangd.setup({
+      -- remove proto, let bufls handle that
+      filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
     })
   end,
 })
@@ -353,7 +365,6 @@ cmp.setup({
     ["<C-u>"] = cmp.mapping.scroll_docs(-8),
     ["<C-d>"] = cmp.mapping.scroll_docs(8),
     ["<C-Space>"] = cmp.mapping.complete({}),
-
     -- Integration with luasnip, use Tab/Shift-Tab to jump between snippet
     -- insert locations
     ["<Tab>"] = cmp.mapping(function(fallback)
@@ -421,7 +432,7 @@ require("luasnip.loaders.from_vscode").load()
 require("neorg").setup({
   load = {
     ["core.defaults"] = {},
-    ["core.norg.dirman"] = {
+    ["core.dirman"] = {
       config = {
         autochdir = true,
         workspaces = {
@@ -430,14 +441,14 @@ require("neorg").setup({
         },
       },
     },
-    ["core.norg.qol.toc"] = {},
-    ["core.norg.concealer"] = {},
-    ["core.norg.completion"] = {
+    ["core.qol.toc"] = {},
+    ["core.concealer"] = {},
+    ["core.completion"] = {
       config = {
         engine = "nvim-cmp",
       },
     },
-    ["core.norg.journal"] = {
+    ["core.journal"] = {
       config = {
         workspace = "home",
       },
