@@ -41,7 +41,6 @@ return require("packer").startup(function(use)
     end,
   })
   use("tpope/vim-sleuth") -- Automatically detect indentation
-  use("editorconfig/editorconfig-vim") -- Detect .editorconfig
   use("tpope/vim-unimpaired") -- Useful bindings
 
   -- Colorschemes
@@ -211,6 +210,17 @@ return require("packer").startup(function(use)
   })
   use("eandrju/cellular-automaton.nvim")
   use("folke/neodev.nvim")
+  use({
+    "Pocco81/true-zen.nvim",
+    config = function()
+      require("true-zen").setup({
+        integrations = {
+          lualine = true,
+        },
+      })
+    end,
+  })
+  use("folke/twilight.nvim")
 
   if packer_bootstrapped ~= nil then
     require("packer").sync()

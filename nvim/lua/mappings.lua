@@ -89,6 +89,14 @@ wk.register({
       d = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>", "Debug nearest test" },
       s = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop nearest test" },
       f = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Run all tests" },
+      o = { "<cmd>lua require('neotest').output.open({enter = true})<cr>", "Open output" },
+    },
+    z = {
+      name = "Zen",
+      a = { "<cmd>TZAtaraxis<cr>", "Ataraxis" },
+      n = { "<cmd>TZNarrow<cr>", "Narrow" },
+      f = { "<cmd>TZFocus<cr>", "Focus" },
+      m = { "<cmd>TZMinimalist<cr>", "Minimalist" },
     },
   },
   ["<space>"] = {
@@ -118,6 +126,15 @@ wk.register({
 
 -- Visual only mode
 wk.register({
+  ["<leader>"] = {
+    z = {
+      name = "Zen",
+      n = {
+        "<cmd>lua require('true-zen').narrow(vim.fn.line('v'), vim.fn.line('.'))<cr>",
+        "Narrow",
+      },
+    },
+  },
   g = {
     ["c"] = { "Comment lines" },
     ["b"] = { "Comment block" },

@@ -1,7 +1,3 @@
--- Editorconfig
--- https://github.com/editorconfig/editorconfig-vim#excluded-patterns
-vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
-
 -- Colorschemes
 -- vim.cmd("colorscheme nightfox")
 -- vim.cmd("colorscheme kanagawa")
@@ -138,6 +134,14 @@ parser_config.cue = {
     branch = "main",
   },
 }
+parser_config.ron = {
+  filetype = "ron",
+  install_info = {
+    url = "https://github.com/zee-editor/tree-sitter-ron",
+    files = { "src/parser.c", "src/scanner.c" },
+    branch = "main",
+  },
+}
 require("nvim-treesitter.configs").setup({
   ensure_installed = "all",
   highlight = {
@@ -145,8 +149,7 @@ require("nvim-treesitter.configs").setup({
   },
 })
 -- Use python parser for bzl files
-local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
-ft_to_parser.bzl = "python"
+vim.treesitter.language.register("python", "bzl")
 
 local lsp_format = require("lsp-format")
 lsp_format.setup({
@@ -256,6 +259,11 @@ require("mason-lspconfig").setup_handlers({
             "-**/bazel-src",
             "-**/bazel-testlogs",
             "-**/node_modules",
+            "-bazel-bin",
+            "-bazel-out",
+            "-bazel-src",
+            "-bazel-testlogs",
+            "-node_modules",
           },
           gofumpt = true,
         },
