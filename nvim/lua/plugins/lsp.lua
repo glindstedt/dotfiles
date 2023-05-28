@@ -11,7 +11,7 @@ local lsp_on_attach = function(client, bufnr)
       d = { "<cmd>Lspsaga goto_definition<cr>", "Go to definition" },
       t = { "<cmd>Lspsaga goto_type_definition<cr>", "Go to type definition" },
     },
-    K = { "<cmd>Lspsaga hover_doc<cr>", "Open hover doc" },
+    K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
     ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
     ["<space>"] = {
       name = "LSP",
@@ -23,7 +23,7 @@ local lsp_on_attach = function(client, bufnr)
       },
       d = { "<cmd>Lspsaga peek_definition<cr>", "Peek definition" },
       t = { "<cmd>Lspsaga peek_type_definition<cr>", "Peek type definition" },
-      ca = { "<cmd>Lspsaga code_action<cr>", "Code Actions" },
+      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Actions" },
       ci = { "<cmd>Lspsaga incoming_calls<cr>", "Incoming calls" },
       co = { "<cmd>Lspsaga outgoing_calls<cr>", "Outgoing calls" },
       o = { "<cmd>Lspsaga outline<cr>", "Open outline" },
