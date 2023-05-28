@@ -100,12 +100,20 @@ return {
       screensaver = 1000 * 60, -- show after 1 minute
     },
   },
-
   {
     "Olical/conjure",
     init = function()
       -- disable doc_word mapping to not conflict with K for lsp in rust
       vim.g["conjure#mapping#doc_word"] = false
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    keys = { "<space>m", "<space>j", "<space>s" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("treesj").setup({ --[[ your config ]]
+      })
     end,
   },
 }
