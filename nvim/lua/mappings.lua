@@ -40,10 +40,10 @@ wk.register({
       "Toggle trailing whitespace",
     },
     p = {
-      name = "Packer",
-      u = { "<cmd>PackerUpdate<cr>", "Clean, then update and install plugins." },
-      s = { "<cmd>PackerSync<cr>", "Perform `PackerUpdate` and then `PackerCompile`." },
-      c = { "<cmd>PackerClean<cr>", "Remove any disabled or unused plugins." },
+      name = "Plugin",
+      u = { "<cmd>Lazy update<cr>", "Clean, then update and install plugins." },
+      s = { "<cmd>Lazy sync<cr>", "Sync plugins" },
+      --   c = { "<cmd>PackerClean<cr>", "Remove any disabled or unused plugins." },
     },
     f = {
       name = "Telescope",
@@ -60,10 +60,10 @@ wk.register({
       t = { "<cmd>Telescope builtin<cr>", "Find builtin pickers" },
     },
     n = {
-      name = "Nvim-Tree",
-      n = { "<cmd>NvimTreeFindFileToggle<cr>", "Toggle nvim-tree" },
-      g = { "<cmd>NvimTreeFindFile<cr>", "Find file in nvim-tree" },
-      c = { "<cmd>NvimTreeClose<cr>", "Close nvim-tree" },
+      name = "Neotree",
+      n = { "<cmd>Neotree filesystem reveal<cr>", "Open filesystem neotree" },
+      g = { "<cmd>Neotree git_status reveal float<cr>", "Open git status neotree" },
+      b = { "<cmd>Neotree buffers reveal float<cr>", "Open buffers neotree" },
     },
     o = {
       name = "Overseer",
@@ -91,17 +91,7 @@ wk.register({
       f = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Run all tests" },
       o = { "<cmd>lua require('neotest').output.open({enter = true})<cr>", "Open output" },
     },
-    z = {
-      name = "Zen",
-      a = { "<cmd>TZAtaraxis<cr>", "Ataraxis" },
-      n = { "<cmd>TZNarrow<cr>", "Narrow" },
-      f = { "<cmd>TZFocus<cr>", "Focus" },
-      m = { "<cmd>TZMinimalist<cr>", "Minimalist" },
-    },
-  },
-  ["<space>"] = {
     e = { "<cmd>lua vim.diagnostic.open_float()<cr>", "Open diagnoztics float" },
-    q = { "<cmd>TroubleToggle document_diagnostics<cr>", "Open diagnostics in trouble" },
   },
   ["["] = {
     d = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Go to previous diagnostic" },
@@ -126,15 +116,6 @@ wk.register({
 
 -- Visual only mode
 wk.register({
-  ["<leader>"] = {
-    z = {
-      name = "Zen",
-      n = {
-        "<cmd>lua require('true-zen').narrow(vim.fn.line('v'), vim.fn.line('.'))<cr>",
-        "Narrow",
-      },
-    },
-  },
   g = {
     ["c"] = { "Comment lines" },
     ["b"] = { "Comment block" },

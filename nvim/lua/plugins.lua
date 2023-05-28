@@ -1,228 +1,111 @@
--- {{{ Bootstrap packer.nvim
-local packer_repo = "wbthomason/packer.nvim"
+return {
+  "mg979/vim-visual-multi",
 
-local packer_bootstrapped = nil
-local function maybe_bootstrap_packer()
-  local fn = vim.fn
+  { "numToStr/Comment.nvim",       opts = {} },
+  "tpope/vim-sleuth",
+  "tpope/vim-unimpaired",
 
-  local packer_install_dir = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+  -- Libraries
+  { "nvim-lua/plenary.nvim",       lazy = true },
+  { "nvim-tree/nvim-web-devicons", lazy = true },
 
-  if fn.empty(fn.glob(packer_install_dir)) > 0 then
-    vim.api.nvim_echo({
-      { "Bootstrapping packer.nvim into ", "Type" },
-      { packer_install_dir, "String" },
-    }, true, {})
-
-    -- https://github.com/wbthomason/packer.nvim/issues/750#issuecomment-1006070458
-    vim.o.runtimepath = vim.fn.stdpath("data") .. "/site/pack/*/start/*," .. vim.o.runtimepath
-
-    packer_bootstrapped = fn.system({
-      "git",
-      "clone",
-      "--depth",
-      "1",
-      string.format("https://github.com/%s", packer_repo),
-      packer_install_dir,
-    })
-  end
-end
-
-maybe_bootstrap_packer()
--- }}}
-
-return require("packer").startup(function(use)
-  use(packer_repo)
-
-  use("mg979/vim-visual-multi") -- Multiple cursor edit
-  use({
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup({})
+  -- Color Schemes
+  {
+    "catppuccin/nvim",
+    init = function()
+      vim.g.catppuccin_flavour = "macchiato"
+      vim.cmd("colorscheme catppuccin")
     end,
-  })
-  use("tpope/vim-sleuth") -- Automatically detect indentation
-  use("tpope/vim-unimpaired") -- Useful bindings
+  },
+  "EdenEast/nightfox.nvim",
+  "sainnhe/everforest",
+  "rebelot/kanagawa.nvim",
 
-  -- Colorschemes
-  use("EdenEast/nightfox.nvim")
-  use("sainnhe/everforest")
-  use("rebelot/kanagawa.nvim")
-  use("catppuccin/nvim")
   -- UI
-  use("nvim-lualine/lualine.nvim")
-  use({
-    "kyazdani42/nvim-tree.lua",
-    requires = {
-      "kyazdani42/nvim-web-devicons",
-    },
-  })
-  use({
-    "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("trouble").setup({})
-    end,
-  })
-  use({
-    "folke/which-key.nvim",
-    config = function()
-      require("which-key").setup({})
-    end,
-  })
-  use({
-    "romgrk/barbar.nvim",
-    requires = { "kyazdani42/nvim-web-devicons" },
-  })
-
-  use("lukas-reineke/indent-blankline.nvim")
-  use({
-    "lewis6991/gitsigns.nvim",
-    requires = {
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    dependencies = {
       "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
     },
-  })
-  use("rcarriga/nvim-notify")
-  use("norcalli/nvim-colorizer.lua")
-
-  use({
-    "nvim-telescope/telescope.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "kyazdani42/nvim-web-devicons",
-    },
-  })
-  -- Use telescope for ui-select
-  use("nvim-telescope/telescope-ui-select.nvim")
-  use("akinsho/toggleterm.nvim")
-
-  use({
-    "ggandor/leap.nvim",
-    requires = { "tpope/vim-repeat" },
-  })
-  use({
-    "goolord/alpha-nvim",
-    config = function()
-      require("alpha").setup(require("alpha.themes.theta").config)
+  },
+  "folke/which-key.nvim",
+  { "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    opts = { show_current_context = true },
+  },
+  {
+    "rcarriga/nvim-notify",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    init = function()
+      -- TODO should I get noice.nvim?
+      -- when noice is not enabled, install notify on VeryLazy
+      -- local Util = require("lazyvim.util")
+      -- if not Util.has("noice.nvim") then
+      --   Util.on_very_lazy(function()
+      vim.notify = require("notify")
+      require("telescope").load_extension("notify")
+      --   end)
+      -- end
     end,
-  })
-
-  -- Basic LSP stuff
-  use("williamboman/mason.nvim")
-  use("williamboman/mason-lspconfig.nvim")
-  use("neovim/nvim-lspconfig")
-  use("lukas-reineke/lsp-format.nvim") -- format on save
-  use({
-    -- Nice LSP progress UI in bottom right corner
-    "j-hui/fidget.nvim",
-    config = function()
-      require("fidget").setup({})
-    end,
-  })
-
-  -- Completion
-  use({
-    "hrsh7th/nvim-cmp",
-    requires = {
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-nvim-lsp",
-      "neovim/nvim-lspconfig",
-      "onsails/lspkind.nvim",
+  },
+  {
+    "norcalli/nvim-colorizer.lua",
+    -- Red
+    -- main = "colorizer",
+    -- event = "VeryLazy",
+    -- config = function()
+    --   require('colorizer').setup()
+    -- end
+  },
+  {
+    "akinsho/toggleterm.nvim",
+    opts = {
+      open_mapping = [[<c-\>]],
+      direction = "float",
+      float_opts = { border = "curved", winblend = 3 },
     },
-  })
-  use("hrsh7th/cmp-cmdline")
-
-  -- Snippets library
-  use("rafamadriz/friendly-snippets")
-  -- Snippet engine
-  use("L3MON4D3/LuaSnip")
-  use("saadparwaiz1/cmp_luasnip")
-  use("benfowler/telescope-luasnip.nvim")
-
-  -- Treesitter
-  use({
-    "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",
-  })
-
-  -- LSP Bridge to CLI formatting/diagnostic tools
-  use({
-    "jose-elias-alvarez/null-ls.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
-  })
-
-  -- Language Support
-  use("google/vim-jsonnet")
-
-  use("Olical/conjure")
-  use("PaterJason/cmp-conjure")
-
-  use({
-    "simrat39/rust-tools.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "mfussenegger/nvim-dap",
-    },
-  })
-  use({
-    "saecki/crates.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("crates").setup()
-    end,
-  })
-
-  -- Debugging
-  use({
+  },
+  {
     "rcarriga/nvim-dap-ui",
-    requires = {
-      "mfussenegger/nvim-dap",
+    dependencies = { "mfussenegger/nvim-dap" },
+    opts = {},
+  },
+  {
+    "ggandor/leap.nvim",
+    dependencies = {
+      "tpope/vim-repeat",
     },
-  })
-
-  -- neorg
-  use({
-    "nvim-neorg/neorg",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-neorg/neorg-telescope",
-    },
-  })
-  use({
-    -- "~/Code/telescope-bookmarks.nvim",
-    "dhruvmanila/telescope-bookmarks.nvim",
-    -- Uncomment if the selected browser is Firefox or buku
-    requires = {
-      "tami5/sqlite.lua",
-    },
-  })
-  use("stevearc/overseer.nvim")
-  use({
-    "nvim-neotest/neotest",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "antoinemadec/FixCursorHold.nvim",
-
-      -- Adapters
-      "nvim-neotest/neotest-go",
-      "rouge8/neotest-rust",
-    },
-  })
-  use("eandrju/cellular-automaton.nvim")
-  use("folke/neodev.nvim")
-  use({
-    "Pocco81/true-zen.nvim",
     config = function()
-      require("true-zen").setup({
-        integrations = {
-          lualine = true,
-        },
-      })
+      require("leap").add_default_mappings()
     end,
-  })
-  use("folke/twilight.nvim")
+  },
+  {
+    "goolord/alpha-nvim",
+    opts = function()
+      return require("alpha.themes.theta").config
+    end,
+  },
+  {
+    "lukas-reineke/headlines.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    opts = {},
+  },
+  {
+    "folke/drop.nvim",
+    opts = {
+      theme = "leaves",
+      screensaver = 1000 * 60, -- show after 1 minute
+    },
+  },
 
-  if packer_bootstrapped ~= nil then
-    require("packer").sync()
-  end
-end)
+  {
+    "Olical/conjure",
+    init = function()
+      -- disable doc_word mapping to not conflict with K for lsp in rust
+      vim.g["conjure#mapping#doc_word"] = false
+    end,
+  },
+}

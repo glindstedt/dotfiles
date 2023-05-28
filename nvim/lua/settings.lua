@@ -25,15 +25,8 @@ vim.opt.expandtab = true
 -- Reduce timeout to make which-key more responsive
 vim.opt.timeoutlen = 500
 
--- Automatically compile packer when saving plugins.lua
-vim.api.nvim_create_autocmd("BufWritePost", {
-  group = vim.api.nvim_create_augroup("packer_user_config", {}),
-  pattern = { "plugins.lua" },
-  command = "source <afile> | PackerCompile",
-})
-
 -- Folding
--- Use treesitter as foldmethod
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldminlines = 20
+
+-- Use python parser for bzl files
+vim.treesitter.language.register("python", "bzl")
