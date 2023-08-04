@@ -20,15 +20,20 @@ return {
           branch = "main",
         },
       }
+      parser_config.river = {
+        filetype = "river",
+        install_info = {
+          url = "https://github.com/grafana/tree-sitter-river",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+      }
       require("nvim-treesitter.configs").setup({
         ensure_installed = "all",
         highlight = {
           enable = true,
         },
       })
-      -- Set treesitter as the default foldexpr
-      vim.opt.foldmethod = "expr"
-      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
     end,
   },
 }

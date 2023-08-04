@@ -17,5 +17,3 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
 require("mappings")
--- TODO
-require("colorizer").setup()

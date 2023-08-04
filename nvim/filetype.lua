@@ -4,5 +4,6 @@ vim.filetype.add({
     cue = "cue",
     as = "cpp",
     ron = "ron",
+    river = "hcl",
   },
 })

@@ -31,25 +31,12 @@ vim.keymap.set("n", "J", "mzJ`z")
 -- Normal mode
 wk.register({
   ["<leader>"] = {
-    m = {
-      "<cmd>nohlsearch<cr>",
-      "Hide search highlighting",
-    },
-    w = {
-      "<cmd>set nolist!<cr>",
-      "Toggle trailing whitespace",
-    },
-    p = {
-      name = "Plugin",
-      u = { "<cmd>Lazy update<cr>", "Clean, then update and install plugins." },
-      s = { "<cmd>Lazy sync<cr>", "Sync plugins" },
-      --   c = { "<cmd>PackerClean<cr>", "Remove any disabled or unused plugins." },
-    },
     f = {
       name = "Telescope",
       f = { "<cmd>Telescope find_files<cr>", "Find files" },
       r = { "<cmd>Telescope oldfiles<cr>", "Find recent files" },
       g = { "<cmd>Telescope live_grep<cr>", "Grep in files" },
+      e = { "<cmd>Telescope egrepify<cr>", "egrep in files" },
       b = { "<cmd>Telescope buffers<cr>", "Find buffers" },
       h = { "<cmd>Telescope help_tags<cr>", "Find help tags" },
       p = { "<cmd>lua require('telescope.builtin').planets{}<cr>", "Find planets" },
@@ -60,10 +47,12 @@ wk.register({
       t = { "<cmd>Telescope builtin<cr>", "Find builtin pickers" },
     },
     n = {
-      name = "Neotree",
-      n = { "<cmd>Neotree filesystem reveal<cr>", "Open filesystem neotree" },
+      name = "Neotree/Neorg",
+      f = { "<cmd>Neotree filesystem reveal<cr>", "Open filesystem neotree" },
       g = { "<cmd>Neotree git_status reveal float<cr>", "Open git status neotree" },
       b = { "<cmd>Neotree buffers reveal float<cr>", "Open buffers neotree" },
+      i = { "<cmd>Neorg index<cr>", "Neorg index" },
+      r = { "<cmd>Neorg return<cr>", "Neorg return" },
     },
     o = {
       name = "Overseer",
@@ -123,3 +112,23 @@ wk.register({
     ["<"] = { "Uncomment" }, -- TODO this label doesn't work for some reason
   },
 }, { mode = "x" })
+
+-- AutoCommands
+local whichKeyCustomID = vim.api.nvim_create_augroup("WhichKeyCustom", {})
+-- Neorg
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = whichKeyCustomID,
+  pattern = { "*.norg" },
+  callback = function(_ev)
+    require("which-key").register({
+      ["<localleader>"] = {
+        name = "+neorg",
+        i = { name = "+insert" },
+        m = { name = "+mode" },
+        l = { name = "+list" },
+        n = { name = "+note" },
+        t = { name = "+task" },
+      },
+    }, { buffer = 0 })
+  end,
+})

@@ -3,6 +3,11 @@ local lsp_on_attach = function(client, bufnr)
   require("lsp-format").on_attach(client)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
+  if client.name == "yamlls" then
+    -- yaml-language-server has this capability but doesn't advertise it
+    client.server_capabilities.documentFormattingProvider = true
+  end
+
   -- Buffer mappings
   wk.register({
     g = {
@@ -11,7 +16,8 @@ local lsp_on_attach = function(client, bufnr)
       d = { "<cmd>Lspsaga goto_definition<cr>", "Go to definition" },
       t = { "<cmd>Lspsaga goto_type_definition<cr>", "Go to type definition" },
     },
-    K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
+    -- nvim-ufo overrides this
+    --K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
     ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
     ["<space>"] = {
       name = "LSP",
@@ -89,7 +95,17 @@ return {
     "nvimdev/lspsaga.nvim",
     branch = "main",
     event = "LspAttach",
-    opts = {},
+    opts = {
+      finder = {
+        keys = {
+          expand_or_jump = "<CR>",
+        },
+      },
+      lightbulb = {
+        -- only show the virtual_text popup
+        sign = false,
+      },
+    },
     dependencies = {
       { "nvim-tree/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
@@ -100,6 +116,8 @@ return {
     -- Nice LSP progress UI in bottom right corner
     "j-hui/fidget.nvim",
     opts = {},
+    -- pin to legacy during rewrite
+    tag = "legacy",
   },
   {
     "neovim/nvim-lspconfig",
@@ -117,6 +135,13 @@ return {
     config = function()
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      -- nvim-ufo
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
+
       lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
         on_attach = lsp_on_attach,
         capabilities = capabilities,

@@ -15,6 +15,12 @@ vim.opt.ignorecase = true
 -- Override ignorecase if search contains upper case characters
 vim.opt.smartcase = true
 
+-- Open vertical splits to the right
+vim.opt.splitright = true
+
+-- Default to conceallevel 2
+vim.opt.conceallevel = 2
+
 -- Default tab expansion behaviour
 local tabwidth = 4
 vim.opt.tabstop = tabwidth
