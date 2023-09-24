@@ -44,7 +44,7 @@ wk.register({
       s = { "<cmd>Telescope luasnip<cr>", "Find snippets" },
       c = { "<cmd>Telescope colorscheme<cr>", "Switch colorscheme" },
       m = { "<cmd>Telescope man_pages<cr>", "Find man pages" },
-      t = { "<cmd>Telescope builtin<cr>", "Find builtin pickers" },
+      t = { "<cmd>TodoTelescope<cr>", "Find TODOs" },
     },
     n = {
       name = "Neotree/Neorg",
