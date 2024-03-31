@@ -61,6 +61,7 @@ config.keys = {
   { mods = "ALT", key = "j", action = act.ActivatePaneDirection("Down") },
   { mods = "ALT", key = "k", action = act.ActivatePaneDirection("Up") },
   { mods = "ALT", key = "l", action = act.ActivatePaneDirection("Right") },
+  { mods = "ALT", key = "b", action = act.RotatePanes("Clockwise") },
   { mods = "ALT", key = "Enter", action = act.DisableDefaultAssignment },
 
   {
