@@ -8,22 +8,21 @@ return {
 
       -- Adapters
       "nvim-neotest/neotest-go",
+      "nvim-neotest/neotest-plenary",
       "rouge8/neotest-rust",
       -- Consumers
       "stevearc/overseer.nvim",
     },
 
     opts = function()
-      local adapter_go = require("neotest-go")
-      local adapter_rust = require("neotest-rust")
-      local overseer_consumer = require("neotest.consumers.overseer")
       return {
         adapters = {
-          adapter_go,
-          adapter_rust,
+          require("neotest-go"),
+          require("neotest-rust"),
+          require("neotest-plenary"),
         },
         consumers = {
-          overseer = overseer_consumer,
+          overseer = require("neotest.consumers.overseer"),
         },
       }
     end,

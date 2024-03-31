@@ -45,6 +45,7 @@ wk.register({
       c = { "<cmd>Telescope colorscheme<cr>", "Switch colorscheme" },
       m = { "<cmd>Telescope man_pages<cr>", "Find man pages" },
       t = { "<cmd>TodoTelescope<cr>", "Find TODOs" },
+      w = { "<cmd>Telescope workspaces<cr>", "Find workspaces" },
     },
     n = {
       name = "Neotree/Neorg",
@@ -100,6 +101,10 @@ wk.register({
       name = "Comment block",
       c = { "Toggle current line" },
     },
+  },
+  ["<localleader>\\"] = {
+    name = "+vim-visual-multi",
+    g = { name = "+reselect" },
   },
 })
 

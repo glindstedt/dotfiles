@@ -1,52 +1,3 @@
-local lsp_on_attach = function(client, bufnr)
-  local wk = require("which-key")
-  require("lsp-format").on_attach(client)
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  if client.name == "yamlls" then
-    -- yaml-language-server has this capability but doesn't advertise it
-    client.server_capabilities.documentFormattingProvider = true
-  end
-
-  -- Buffer mappings
-  wk.register({
-    g = {
-      name = "Go To",
-      h = { "<cmd>Lspsaga lsp_finder<cr>", "LSP finder" },
-      d = { "<cmd>Lspsaga goto_definition<cr>", "Go to definition" },
-      t = { "<cmd>Lspsaga goto_type_definition<cr>", "Go to type definition" },
-    },
-    -- nvim-ufo overrides this
-    --K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
-    ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
-    ["<space>"] = {
-      name = "LSP",
-      w = {
-        name = "Workspace",
-        a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add workspace folder" },
-        r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove workspace folder" },
-        l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List workspace folders" },
-      },
-      d = { "<cmd>Lspsaga peek_definition<cr>", "Peek definition" },
-      t = { "<cmd>Lspsaga peek_type_definition<cr>", "Peek type definition" },
-      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Actions" },
-      ci = { "<cmd>Lspsaga incoming_calls<cr>", "Incoming calls" },
-      co = { "<cmd>Lspsaga outgoing_calls<cr>", "Outgoing calls" },
-      o = { "<cmd>Lspsaga outline<cr>", "Open outline" },
-      rn = { "<cmd>Lspsaga rename<cr>", "Rename in file" },
-      rN = { "<cmd>Lspsaga rename ++project<cr>", "Rename in selected files" },
-      F = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "Format file" },
-      f = {
-        name = "Find",
-        d = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "Symbols in Document" },
-        w = { "<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Symbols in Workspace" },
-      },
-    },
-  }, {
-    buffer = bufnr,
-  })
-end
-
 return {
   { "williamboman/mason.nvim", opts = {} },
   {
@@ -66,7 +17,7 @@ return {
     },
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "folke/which-key.nvim",
@@ -76,18 +27,16 @@ return {
       local null_ls = require("null-ls")
       return {
         sources = {
-          null_ls.builtins.code_actions.shellcheck,
           null_ls.builtins.completion.luasnip,
           null_ls.builtins.diagnostics.buildifier,
           null_ls.builtins.diagnostics.fish,
-          null_ls.builtins.diagnostics.shellcheck,
           null_ls.builtins.formatting.buildifier,
           null_ls.builtins.formatting.fish_indent,
           null_ls.builtins.formatting.stylua,
           null_ls.builtins.hover.dictionary,
         },
         diagnostics_format = "[#{c}] #{m} (#{s})",
-        on_attach = lsp_on_attach,
+        on_attach = require("lib").lsp_on_attach,
       }
     end,
   },
@@ -98,7 +47,7 @@ return {
     opts = {
       finder = {
         keys = {
-          expand_or_jump = "<CR>",
+          toggle_or_open = "<CR>",
         },
       },
       lightbulb = {
@@ -113,17 +62,15 @@ return {
     },
   },
   {
-    -- Nice LSP progress UI in bottom right corner
-    "j-hui/fidget.nvim",
-    opts = {},
-    -- pin to legacy during rewrite
-    tag = "legacy",
-  },
-  {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { "folke/neodev.nvim", opts = {} },
+      {
+        "folke/neodev.nvim",
+        opts = {
+          library = { plugins = { "nvim-dap-ui" }, types = true },
+        },
+      },
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "nvimdev/lspsaga.nvim",
@@ -143,7 +90,7 @@ return {
       }
 
       lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
-        on_attach = lsp_on_attach,
+        on_attach = require("lib").lsp_on_attach,
         capabilities = capabilities,
       })
       require("mason-lspconfig").setup({
@@ -221,6 +168,24 @@ return {
               filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
             })
           end,
+          ["helm_ls"] = function()
+            lspconfig.helm_ls.setup({
+              cmd = { "helm_ls", "serve" },
+              filetypes = { "helm" },
+              root_dir = lspconfig.util.root_pattern("Chart.yaml"),
+            })
+          end,
+          -- TODO can I get yamlls to not attach if helm_ls attached?
+          -- ["yamlls"] = function()
+          --   lspconfig.yamlls.setup({
+          --     on_init = function(client)
+          --       vim.print(client)
+          --     end,
+          --     -- filetypes = vim.tbl_filter(function(ft)
+          --     --   return not vim.tbl_contains({ "helm" }, ft)
+          --     -- end, lspconfig.yamlls.document_config.default_config.filetypes),
+          --   })
+          -- end,
         },
       })
     end,

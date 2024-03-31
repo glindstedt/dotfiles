@@ -6,5 +6,6 @@ return {
         ["neo-tree"] = { event = "BufWipeout" },
       },
     },
+    version = "^1.0.0",
   },
 }

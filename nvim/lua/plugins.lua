@@ -1,13 +1,20 @@
 return {
   "mg979/vim-visual-multi",
 
-  { "numToStr/Comment.nvim",       opts = {} },
+  { "numToStr/Comment.nvim", opts = {} },
   "tpope/vim-sleuth",
-  { "tummetott/unimpaired.nvim",   opts = {} },
+  { "tummetott/unimpaired.nvim", opts = {} },
 
   -- Libraries
-  { "nvim-lua/plenary.nvim",       lazy = true },
+  { "nvim-lua/plenary.nvim", lazy = true },
   { "nvim-tree/nvim-web-devicons", lazy = true },
+
+  -- Luarocks
+  {
+    "vhyrro/luarocks.nvim",
+    priority = 1000, -- We'd like this plugin to load first out of the rest
+    config = true, -- This automatically runs `require("luarocks-nvim").setup()`
+  },
 
   -- Color Schemes
   {
@@ -22,6 +29,19 @@ return {
   "rebelot/kanagawa.nvim",
 
   -- UI
+  {
+    -- WARN https://github.com/ahmedkhalf/project.nvim instead?
+    "natecraddock/workspaces.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    init = function()
+      require("telescope").load_extension("workspaces")
+    end,
+    opts = {
+      hooks = {
+        open = { "NeoTreeReveal" },
+      },
+    },
+  },
   {
     "nvim-neo-tree/neo-tree.nvim",
     dependencies = {
@@ -128,7 +148,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap" },
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     opts = {},
   },
   {
@@ -171,11 +191,27 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {},
   },
+  { "towolf/vim-helm" },
   {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
-      -- add any options here
+      lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+        },
+        progress = {
+          enabled = true,
+        },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = true, -- use a classic bottom cmdline for search
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+      },
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
@@ -191,6 +227,46 @@ return {
       default_pet = "dog",
       default_style = "brown",
       random = false,
+    },
+  },
+  {
+    "3rd/image.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+          require("nvim-treesitter.configs").setup({
+            ensure_installed = { "markdown" },
+            highlight = { enable = true },
+          })
+        end,
+      },
+    },
+    opts = {
+      backend = "kitty",
+      integrations = {
+        markdown = {
+          enabled = true,
+          clear_in_insert_mode = false,
+          download_remote_images = true,
+          only_render_image_at_cursor = false,
+          filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+        },
+        neorg = {
+          enabled = true,
+          clear_in_insert_mode = false,
+          download_remote_images = true,
+          only_render_image_at_cursor = false,
+          filetypes = { "norg" },
+        },
+      },
+      max_width = nil,
+      max_height = nil,
+      max_width_window_percentage = nil,
+      max_height_window_percentage = 50,
+      kitty_method = "normal",
     },
   },
 }

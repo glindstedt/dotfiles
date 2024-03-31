@@ -3,7 +3,7 @@ return {
     -- allows folding by pressing `h` on first char of line
     "chrisgrieser/nvim-origami",
     event = "BufReadPost", -- later or on keypress would prevent saving folds
-    opts = true,           -- needed even when using default config
+    opts = true, -- needed even when using default config
   },
   {
     "kevinhwang91/nvim-ufo",
@@ -19,8 +19,8 @@ return {
           require("statuscol").setup({
             relculright = true,
             segments = {
-              { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
-              { text = { "%s" },                  click = "v:lua.ScSa" },
+              { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+              { text = { "%s" }, click = "v:lua.ScSa" },
               { text = { builtin.lnumfunc, " " }, condition = { true, builtin.not_empty }, click = "v:lua.ScLa" },
             },
           })
@@ -29,47 +29,8 @@ return {
     },
     config = function()
       local ufo = require("ufo")
-      local promise = require("promise")
 
-      local ftMap = {
-        vim = "indent",
-        python = "indent",
-        git = "",
-      }
-
-      -- lsp -> treesitter -> indent
-      local function customizeSelector(bufnr)
-        local function handleFallbackException(err, providerName)
-          if type(err) == "string" and err:match("UfoFallbackException") then
-            return ufo.getFolds(providerName, bufnr)
-          else
-            return promise.reject(err)
-          end
-        end
-
-        return ufo
-            .getFolds("lsp", bufnr)
-            :catch(function(err)
-              return handleFallbackException(err, "treesitter")
-            end)
-            :catch(function(err)
-              return handleFallbackException(err, "indent")
-            end)
-      end
-
-      ufo.setup({
-        provider_selector = function(_bufnr, filetype, _buftype)
-          return ftMap[filetype] or customizeSelector
-        end,
-        preview = {
-          mappings = {
-            scrollU = "<C-u>",
-            scrollD = "<C-d>",
-            scrollE = "j",
-            scrollY = "k",
-          },
-        },
-      })
+      ufo.setup(require("lib").setup.ufo)
       vim.opt.foldcolumn = "1"
       vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
       vim.opt.foldlevel = 99

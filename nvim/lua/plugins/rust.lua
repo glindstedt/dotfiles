@@ -3,7 +3,13 @@ return {
     "saecki/crates.nvim",
     ft = "toml",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {},
+    opts = {
+      src = {
+        cmp = {
+          enabled = true,
+        },
+      },
+    },
   },
   {
     "simrat39/rust-tools.nvim",
