@@ -51,12 +51,7 @@ if plugin_manager == "rocks" then
     vim.fs.joinpath(rocks_config.rocks_path, "lib", "luarocks", "rocks-5.1", "rocks.nvim", "*")
   )
   -- }}}
-
-  -- Eager load of colorscheme so we can set it here
-  require("rocks").packadd("kanagawa.nvim")
-  vim.cmd("colorscheme kanagawa")
 end
 
-print(vim.env.NVIM_PLUG_MANAGER)
--- vim.api.nvim_notify(vim.env.NVIM_PLUG_MANAGER, 0, {})
+-- print(vim.env.NVIM_PLUG_MANAGER)
 require("mappings")

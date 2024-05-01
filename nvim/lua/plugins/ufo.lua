@@ -1,11 +1,5 @@
 return {
   {
-    -- allows folding by pressing `h` on first char of line
-    "chrisgrieser/nvim-origami",
-    event = "BufReadPost", -- later or on keypress would prevent saving folds
-    opts = true, -- needed even when using default config
-  },
-  {
     "kevinhwang91/nvim-ufo",
     dependencies = {
       "kevinhwang91/promise-async",
