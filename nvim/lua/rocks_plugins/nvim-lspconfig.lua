@@ -17,6 +17,8 @@ lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_c
   capabilities = capabilities,
 })
 
+lspconfig.starpls.setup({})
+
 require("mason-lspconfig").setup({
   ensure_installed = { "bashls", "lua_ls" },
   handlers = {

@@ -93,6 +93,9 @@ return {
         on_attach = require("lib").lsp_on_attach,
         capabilities = capabilities,
       })
+
+      lspconfig.starpls.setup({})
+
       require("mason-lspconfig").setup({
         ensure_installed = { "bashls", "lua_ls" },
         handlers = {
