@@ -35,7 +35,7 @@ vim.opt.timeoutlen = 500
 vim.opt.foldminlines = 20
 
 -- Use python parser for bzl files
-vim.treesitter.language.register("python", "bzl")
+-- vim.treesitter.language.register("python", "bzl")
 
 -- Configuration for diagnostics
 local signs = {

@@ -21,7 +21,7 @@ alpha-nvim = "scm"
 cmp-nvim-lsp = "scm"
 "comment.nvim" = "0.8.0"
 "go.nvim" = "0.2.1"
-"headlines.nvim" = "4.0.1"
+"headlines.nvim" = "scm"
 "hlchunk.nvim" = "1.1.0"
 "kanagawa.nvim" = "scm"
 "lspkind.nvim" = "scm"
@@ -31,10 +31,10 @@ cmp-nvim-lsp = "scm"
 luasnip = "2.3.0"
 "mason-lspconfig.nvim" = "1.29.0"
 "mason.nvim" = "1.10.0"
-"neodev.nvim" = "2.5.2"
-neorg = "8.5.0"
+"neodev.nvim" = "3.0.0"
+neorg = "8.7.1"
 neorg-telescope = "1.1.0"
-neotest = "5.2.5"
+neotest = "5.3.3"
 "neo-tree.nvim" = "3.26"
 # https://github.com/neovim/neovim/issues/21056
 # "noice.nvim" = "2.0.1"
@@ -46,12 +46,12 @@ nvim-notify = "3.13.5"
 nvim-ufo = "1.4.0"
 "overseer.nvim" = "1.4.0"
 "plenary.nvim" = "scm"
-"rocks-config.nvim" = "1.6.0"
-"rocks-dev.nvim" = "1.2.1"
+"rocks-config.nvim" = "2.0.0"
+"rocks-dev.nvim" = "1.2.3"
 "rocks-git.nvim" = "1.5.1"
-"rocks.nvim" = "2.29.1"
+"rocks.nvim" = "2.31.3"
 "rocks-treesitter.nvim" = "scm"
-rustaceanvim = "4.23.5"
+rustaceanvim = "4.25.1"
 "statuscol.nvim" = "scm"
 "telescope.nvim" = "scm"
 "toggleterm.nvim" = "2.11.0"
@@ -68,14 +68,22 @@ tree-sitter-starlark = "scm"
 tree-sitter-toml = "scm"
 tree-sitter-vimdoc = "scm"
 tree-sitter-vim = "scm"
-"trouble.nvim" = "2.10.0"
+"trouble.nvim" = "3.4.2"
 "unimpaired.nvim" = "0.2.0"
-"which-key.nvim" = "1.6.0"
+"which-key.nvim" = "2.1.0"
+# tree-sitter-just = "scm"
+tree-sitter-gitignore = "scm"
+tree-sitter-make = "scm"
+tree-sitter-yaml = "scm"
+tree-sitter-query = "scm"
+
+[plugins.vim-just]
+git = "NoahTheDuke/vim-just"
 
 # https://github.com/nvim-neorg/neorg/issues/1351
-[plugins.nvim-treesitter]
-git = "nvim-treesitter/nvim-treesitter"
-rev = "v0.9.2^{}"
+# [plugins.nvim-treesitter]
+# git = "nvim-treesitter/nvim-treesitter"
+# rev = "v0.9.2^{}"
 
 # not available on luarocks yet
 [plugins.lsp-format]
@@ -95,6 +103,14 @@ git = "nvim-neotest/neotest-go"
 
 [plugins.eldritch]
 git = "eldritch-theme/eldritch.nvim"
+
+# not available on luarocks, y tho? PR got merged
+[plugins.vim-visual-multi]
+git = "mg979/vim-visual-multi"
+
+# # not available on luarocks
+# [plugins.vim-just]
+# git = "NoahTheDuke/vim-just"
 
 [treesitter]
 auto_highlight = "all"

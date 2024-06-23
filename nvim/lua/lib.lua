@@ -22,6 +22,9 @@ lib.lsp_on_attach = function(client, bufnr)
       h = { "<cmd>Lspsaga finder<cr>", "LSP finder" },
       d = { "<cmd>Lspsaga goto_definition<cr>", "Go to definition" },
       t = { "<cmd>Lspsaga goto_type_definition<cr>", "Go to type definition" },
+      i = { "<cmd>Lspsaga finder imp<cr>", "Find implementations" },
+      r = { "<cmd>Lspsaga finder ref<cr>", "Find references" },
+      f = { "<cmd>Lspsaga finder def+ref+imp<cr>", "Find all..." },
     },
     -- nvim-ufo overrides this
     --K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
