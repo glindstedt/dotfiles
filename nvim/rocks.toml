@@ -26,8 +26,7 @@ cmp-nvim-lsp = "scm"
 "kanagawa.nvim" = "scm"
 "lspkind.nvim" = "scm"
 "lspsaga.nvim" = "scm"
-# TODO doesn't work
-# "lualine.nvim" = "scm"
+"lualine.nvim" = "scm"
 luasnip = "2.3.0"
 "mason-lspconfig.nvim" = "1.29.0"
 "mason.nvim" = "1.10.0"
@@ -68,7 +67,6 @@ tree-sitter-starlark = "scm"
 tree-sitter-toml = "scm"
 tree-sitter-vimdoc = "scm"
 tree-sitter-vim = "scm"
-"trouble.nvim" = "3.4.2"
 "unimpaired.nvim" = "0.2.0"
 "which-key.nvim" = "2.1.0"
 # tree-sitter-just = "scm"
@@ -130,9 +128,6 @@ options = {}
 
 [plugins.go.config]
 options = {}
-
-[plugins.lualine.config.options]
-extensions = ["neo-tree", "overseer", "nvim-dap-ui"]
 
 [plugins.lspsaga.config]
 options = { finder = { keys = { toggle_or_open = "<CR>" } }, lightbulb = { sign = "false" } }
