@@ -3,6 +3,17 @@ require("neodev").setup({})
 -- Mason needs to be initialized before mason-lspconfig is used
 require("mason").setup({})
 
+require("lspsaga").setup({
+  finder = {
+    keys = {
+      toggle_or_open = "<CR>",
+    },
+  },
+  lightbulb = {
+    sign = false,
+  },
+})
+
 local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -53,6 +64,9 @@ require("mason-lspconfig").setup({
               -- https://github.com/LuaLS/lua-language-server/issues/679
               checkThirdParty = false,
             },
+            hint = {
+              enable = true,
+            },
           },
         },
       })
@@ -75,6 +89,15 @@ require("mason-lspconfig").setup({
               "-node_modules",
             },
             gofumpt = true,
+            hints = {
+              compositeLiteralFields = true,
+              -- compositeLiteralTypes = true,
+              constantValues = true,
+              parameterNames = true,
+              -- assignVariableTypes = true,
+              -- rangeVariableTypes = true,
+              functionTypeParameters = true,
+            },
           },
         },
       })

@@ -50,5 +50,9 @@ require("neorg").setup({
 
     -- Community
     ["core.integrations.telescope"] = {},
+
+    -- Export
+    ["core.export"] = {},
+    ["core.export.markdown"] = {},
   },
 })

@@ -16,43 +16,40 @@ lib.lsp_on_attach = function(client, bufnr)
   end
 
   -- Buffer mappings
-  wk.register({
-    g = {
-      name = "Go To",
-      h = { "<cmd>Lspsaga finder<cr>", "LSP finder" },
-      d = { "<cmd>Lspsaga goto_definition<cr>", "Go to definition" },
-      t = { "<cmd>Lspsaga goto_type_definition<cr>", "Go to type definition" },
-      i = { "<cmd>Lspsaga finder imp<cr>", "Find implementations" },
-      r = { "<cmd>Lspsaga finder ref<cr>", "Find references" },
-      f = { "<cmd>Lspsaga finder def+ref+imp<cr>", "Find all..." },
+  wk.add({
+    { "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", desc = "Signature help" },
+    { "<space>", group = "LSP" },
+    { "<space>F", "<cmd>lua vim.lsp.buf.format({async=true})<cr>", desc = "Format file" },
+    { "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Actions" },
+    { "<space>ci", "<cmd>Lspsaga incoming_calls<cr>", desc = "Incoming calls" },
+    { "<space>co", "<cmd>Lspsaga outgoing_calls<cr>", desc = "Outgoing calls" },
+    { "<space>d", "<cmd>Lspsaga peek_definition<cr>", desc = "Peek definition" },
+    { "<space>f", group = "Find" },
+    { "<space>fd", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", desc = "Symbols in Document" },
+    {
+      "<space>fw",
+      "<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>",
+      desc = "Symbols in Workspace",
     },
-    -- nvim-ufo overrides this
-    --K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Open hover doc" },
-    ["<C-k>"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature help" },
-    ["<space>"] = {
-      name = "LSP",
-      w = {
-        name = "Workspace",
-        a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add workspace folder" },
-        r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove workspace folder" },
-        l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List workspace folders" },
-      },
-      d = { "<cmd>Lspsaga peek_definition<cr>", "Peek definition" },
-      t = { "<cmd>Lspsaga peek_type_definition<cr>", "Peek type definition" },
-      ca = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Actions" },
-      ci = { "<cmd>Lspsaga incoming_calls<cr>", "Incoming calls" },
-      co = { "<cmd>Lspsaga outgoing_calls<cr>", "Outgoing calls" },
-      o = { "<cmd>Lspsaga outline<cr>", "Open outline" },
-      rn = { "<cmd>Lspsaga rename<cr>", "Rename in file" },
-      rN = { "<cmd>Lspsaga rename ++project<cr>", "Rename in selected files" },
-      F = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "Format file" },
-      f = {
-        name = "Find",
-        d = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "Symbols in Document" },
-        w = { "<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Symbols in Workspace" },
-      },
+    { "<space>o", "<cmd>Lspsaga outline<cr>", desc = "Open outline" },
+    { "<space>rN", "<cmd>Lspsaga rename ++project<cr>", desc = "Rename in selected files" },
+    { "<space>rn", "<cmd>Lspsaga rename<cr>", desc = "Rename in file" },
+    { "<space>t", "<cmd>Lspsaga peek_type_definition<cr>", desc = "Peek type definition" },
+    { "<space>w", group = "Workspace" },
+    { "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", desc = "Add workspace folder" },
+    {
+      "<space>wl",
+      "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>",
+      desc = "List workspace folders",
     },
-  }, {
+    { "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", desc = "Remove workspace folder" },
+    { "g", group = "Go To" },
+    { "gd", "<cmd>Lspsaga goto_definition<cr>", desc = "Go to definition" },
+    { "gf", "<cmd>Lspsaga finder def+ref+imp<cr>", desc = "Find all..." },
+    { "gh", "<cmd>Lspsaga finder<cr>", desc = "LSP finder" },
+    { "gi", "<cmd>Lspsaga finder imp<cr>", desc = "Find implementations" },
+    { "gr", "<cmd>Lspsaga finder ref<cr>", desc = "Find references" },
+    { "gt", "<cmd>Lspsaga goto_type_definition<cr>", desc = "Go to type definition" },
     buffer = bufnr,
   })
 end
