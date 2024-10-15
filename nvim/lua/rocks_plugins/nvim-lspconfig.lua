@@ -73,6 +73,14 @@ require("mason-lspconfig").setup({
     end,
     ["gopls"] = function()
       lspconfig.gopls.setup({
+        on_init = function(client)
+          local path = client.workspace_folders[1].name
+          local is_bazel_workspace = vim.fn.filereadable(path .. "/WORKSPACE")
+          if is_bazel_workspace ~= 0 then
+            client.settings["gopls"].env.GOPACKAGESDRIVER = path .. "/bazel/gopackagesdriver.sh"
+            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+          end
+        end,
         cmd = { "gopls", "-remote=auto" },
         settings = {
           gopls = {
