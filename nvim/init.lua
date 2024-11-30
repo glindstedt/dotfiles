@@ -29,8 +29,7 @@ end
 if plugin_manager == "rocks" then
   -- {{{ rocks.nvim
   local rocks_config = {
-    rocks_path = vim.fn.stdpath("data") .. "/rocks",
-    luarocks_binary = vim.fn.stdpath("data") .. "/rocks/bin/luarocks",
+    rocks_path = vim.env.HOME .. "/.local/share/nvim/rocks",
   }
 
   vim.g.rocks_nvim = rocks_config
