@@ -1,0 +1,18 @@
+# Move time to right prompt in nushell
+right_format = '$time'
+
+[gcloud]
+disabled = true
+
+[python]
+disabled = true
+
+[golang]
+disabled = true
+
+[kubernetes]
+disabled = false
+symbol = ""
+
+[time]
+disabled = false
