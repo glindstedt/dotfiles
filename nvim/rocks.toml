@@ -32,15 +32,14 @@ luasnip = "2.3.0"
 "neodev.nvim" = "3.0.0"
 neorg = "9.1.1"
 neorg-telescope = "1.2.2"
-neotest = "5.6.1"
+neotest = "5.7.0"
 "neo-tree.nvim" = "3.27"
 # https://github.com/neovim/neovim/issues/21056
 # "noice.nvim" = "2.0.1"
 "none-ls.nvim" = "scm"
 nvim-dap-ui = "4.0.0"
 nvim-lspconfig = "1.2.0"
-nvim-notify = "3.14.0"
-nvim-ufo = "1.4.0"
+nvim-notify = "3.14.1"
 "overseer.nvim" = "1.5.0"
 "plenary.nvim" = "scm"
 "rocks-config.nvim" = "3.1.0"
@@ -48,7 +47,7 @@ nvim-ufo = "1.4.0"
 "rocks-edit.nvim" = "scm"
 "rocks-git.nvim" = "2.5.2"
 "rocks.nvim" = "2.43.0"
-"rocks-treesitter.nvim" = "1.3.0"
+"rocks-treesitter.nvim" = "scm"
 rustaceanvim = "5.20.1"
 "statuscol.nvim" = "scm"
 "telescope.nvim" = "scm"
@@ -90,9 +89,13 @@ tree-sitter-terraform = "scm"
 tree-sitter-cpp = "0.0.35"
 tree-sitter-editorconfig = "0.0.45"
 
+[plugins.nvim-ufo]
+git = "kevinhwang91/nvim-ufo"
+rev = "32cb247b893a384f1888b9cd737264159ecf183c"
+
 [plugins.vim-just]
 git = "NoahTheDuke/vim-just"
-rev = "fbe69d1723230e14f245ca34b0c98fa916b36f64"
+rev = "ed67f198e981f555c0f9e9ed5b69b4b06543a9e1"
 
 [plugins.lsp-format]
 git = "lukas-reineke/lsp-format.nvim"
@@ -112,7 +115,7 @@ rev = "92950ad7be2ca02a41abca5c6600ff6ffaf5b5d6"
 
 [plugins.eldritch]
 git = "eldritch-theme/eldritch.nvim"
-rev = "48788ef2f7be7e86b0a57ef87f1a96bc18e24b8b"
+rev = "d3df98f58841bdbd88fbe1ca27c9eb76ccca6572"
 
 [plugins.vim-visual-multi]
 git = "mg979/vim-visual-multi"
