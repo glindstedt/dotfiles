@@ -1,6 +1,51 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
+---@module 'obazel'
+---@type obazel.Config
+vim.g.obazel = {
+  -- TODO try out putting this in a .nvim.lua
+  -- bazel_binary = "foobar",
+  -- blabla="foobar"
+  overseer = {
+    templates = {
+      { template = { name = "bazel ...", priority = 49 } },
+      {
+        template = { name = "bazel run //:gazelle", priority = 50 },
+        args = { "run", "//:gazelle" },
+      },
+    },
+    generators = {
+      {
+        query_template = "tests(%s:*)",
+        args = { "test" },
+        template_file_definition = {
+          tags = { "TEST" },
+          priority = 51,
+        },
+      },
+      {
+        query_template = 'kind(".*_binary", %s:*)',
+        args = { "run" },
+        template_file_definition = {
+          tags = { "RUN" },
+          priority = 52,
+        },
+      },
+      {
+        query_template = "kind(rule, %s:*)",
+        args = { "build" },
+        template_file_definition = {
+          tags = { "BUILD" },
+          priority = 100,
+        },
+      },
+    },
+  },
+}
+
+vim.opt.exrc = true
+
 vim.opt.encoding = "utf-8"
 vim.opt.backspace = "indent,eol,start"
 
@@ -64,6 +109,10 @@ local config = {
     header = "Diagnostic",
     prefix = "",
   },
+  virtual_lines = true,
+  -- virtual_text = true,
 }
+
+vim.treesitter.language.register("terraform", { "terraform", "terraform-vars" })
 
 vim.diagnostic.config(config)

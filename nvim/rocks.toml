@@ -26,32 +26,31 @@ alpha-nvim = "scm"
 "lspkind.nvim" = "scm"
 "lspsaga.nvim" = "scm"
 "lualine.nvim" = "scm"
-luasnip = "2.3.0"
-"mason-lspconfig.nvim" = "1.31.0"
-"mason.nvim" = "1.10.0"
-"neodev.nvim" = "3.0.0"
-neorg = "9.1.1"
+luasnip = "2.4.0"
+"mason-lspconfig.nvim" = "2.0.0"
+"mason.nvim" = "2.0.0"
+neorg = "9.3.0"
 neorg-telescope = "1.2.2"
-neotest = "5.7.0"
-"neo-tree.nvim" = "3.27"
+neotest = "5.8.0"
+"neo-tree.nvim" = "3.33"
 # https://github.com/neovim/neovim/issues/21056
 # "noice.nvim" = "2.0.1"
 "none-ls.nvim" = "scm"
 nvim-dap-ui = "4.0.0"
-nvim-lspconfig = "1.2.0"
-nvim-notify = "3.14.1"
-"overseer.nvim" = "1.5.0"
+nvim-lspconfig = "2.1.0"
+nvim-notify = "3.15.0"
+"overseer.nvim" = "1.6.0"
 "plenary.nvim" = "scm"
-"rocks-config.nvim" = "3.1.0"
-"rocks-dev.nvim" = "1.7.0"
+"rocks-config.nvim" = "3.1.1"
+"rocks-dev.nvim" = "1.8.0"
 "rocks-edit.nvim" = "scm"
-"rocks-git.nvim" = "2.5.2"
-"rocks.nvim" = "2.43.0"
+"rocks-git.nvim" = "2.5.3"
+"rocks.nvim" = "2.44.0"
 "rocks-treesitter.nvim" = "scm"
-rustaceanvim = "5.20.1"
+rustaceanvim = "6.2.0"
 "statuscol.nvim" = "scm"
 "telescope.nvim" = "scm"
-"toggleterm.nvim" = "2.13.0"
+"toggleterm.nvim" = "2.13.1"
 tree-sitter-bash = "scm"
 tree-sitter-go = "scm"
 tree-sitter-jsonc = "scm"
@@ -65,8 +64,8 @@ tree-sitter-starlark = "scm"
 tree-sitter-toml = "scm"
 tree-sitter-vimdoc = "scm"
 tree-sitter-vim = "scm"
-"unimpaired.nvim" = "0.2.0"
-"which-key.nvim" = "3.15.0"
+"unimpaired.nvim" = "0.4.0"
+"which-key.nvim" = "3.17.0"
 # tree-sitter-just = "scm"
 tree-sitter-gitignore = "scm"
 tree-sitter-make = "scm"
@@ -86,12 +85,23 @@ tree-sitter-ini = "scm"
 tree-sitter-gomod = "scm"
 tree-sitter-gosum = "scm"
 tree-sitter-terraform = "scm"
-tree-sitter-cpp = "0.0.35"
-tree-sitter-editorconfig = "0.0.45"
-
-[plugins.nvim-ufo]
-git = "kevinhwang91/nvim-ufo"
-rev = "32cb247b893a384f1888b9cd737264159ecf183c"
+tree-sitter-cpp = "0.0.41"
+tree-sitter-editorconfig = "0.0.48"
+"lazydev.nvim" = "1.9.0"
+"rest.nvim" = "3.12.0"
+tree-sitter-rust = "0.0.50"
+tree-sitter-html = "0.0.36"
+nvim-ufo= "1.5.0"
+"obazel.nvim"= "0.1.1"
+"nui.nvim" = "0.4.0"
+tree-sitter-sql = "0.0.41"
+tree-sitter-typescript = "0.0.37"
+tree-sitter-tsx = "0.0.35"
+tree-sitter-norg = "0.2.6"
+tree-sitter-diff = "0.0.32"
+tree-sitter-scss = "0.0.29"
+tree-sitter-svelte = "0.0.33"
+tree-sitter-nginx = "0.0.30"
 
 [plugins.vim-just]
 git = "NoahTheDuke/vim-just"
@@ -99,11 +109,11 @@ rev = "ed67f198e981f555c0f9e9ed5b69b4b06543a9e1"
 
 [plugins.lsp-format]
 git = "lukas-reineke/lsp-format.nvim"
-rev = "v2.7.1"
+rev = "v2.7.2"
 
 [plugins.gitsigns]
 git = "lewis6991/gitsigns.nvim"
-rev = "v0.9.0"
+rev = "v1.0.2"
 
 [plugins.barbar]
 git = "romgrk/barbar.nvim"
@@ -115,7 +125,7 @@ rev = "92950ad7be2ca02a41abca5c6600ff6ffaf5b5d6"
 
 [plugins.eldritch]
 git = "eldritch-theme/eldritch.nvim"
-rev = "d3df98f58841bdbd88fbe1ca27c9eb76ccca6572"
+rev = "dbfbaedfdf7b3d40050015fc16dca6aedc97d756"
 
 [plugins.vim-visual-multi]
 git = "mg979/vim-visual-multi"
@@ -139,3 +149,19 @@ options = {}
 
 [plugins.go.config]
 options = {}
+
+[plugins."dressing.nvim"]
+git = "github:stevearc/dressing.nvim"
+rev = "v3.1.1"
+
+[plugins."hunk.nvim"]
+git = "github:julienvincent/hunk.nvim"
+rev = "v1.7.0"
+
+[plugins."telescope-egrepify.nvim"]
+git = "fdschmidt93/telescope-egrepify.nvim"
+rev = "a8070970a661330c4e00450d25f874f6c2b00af9"
+
+[plugins."output-panel.nvim"]
+git = "github:mhanberg/output-panel.nvim"
+rev = "v1.0.0"

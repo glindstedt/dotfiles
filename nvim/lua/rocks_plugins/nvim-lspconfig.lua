@@ -1,5 +1,5 @@
--- neodev needs to be initialized before lsp
-require("neodev").setup({})
+-- lazydev needs to be initialized before lsp
+require("lazydev").setup({})
 -- Mason needs to be initialized before mason-lspconfig is used
 require("mason").setup({})
 
@@ -140,6 +140,26 @@ require("mason-lspconfig").setup({
     end,
     ["rust_analyzer"] = function()
       -- Disable so it doesn't conflict with rustaceanvim plugin
+    end,
+    ["pylsp"] = function()
+      lspconfig.pylsp.setup({
+        settings = {
+          pylsp = {
+            plugins = {
+              -- Disable diagnostics and formatting, use ruff for that instead
+              autopep8 = {
+                enabled = false,
+              },
+              pycodestyle = {
+                enabled = false,
+              },
+              pyflakes = {
+                enabled = false,
+              },
+            },
+          },
+        },
+      })
     end,
     -- TODO can I get yamlls to not attach if helm_ls attached?
     -- ["yamlls"] = function()

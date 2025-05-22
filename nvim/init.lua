@@ -2,7 +2,7 @@ require("settings")
 
 -- Switch between lazy.nvim and rocks.nvim for plugin management via env variable
 local plugin_managers = { "lazy", "rocks" }
-local plugin_manager = vim.env.NVIM_PLUG_MANAGER or "lazy"
+local plugin_manager = vim.env.NVIM_PLUG_MANAGER or "rocks"
 
 if not vim.list_contains(plugin_managers, plugin_manager) then
   plugin_manager = "lazy"

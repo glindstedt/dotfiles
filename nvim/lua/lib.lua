@@ -15,6 +15,15 @@ lib.lsp_on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = true
   end
 
+  if client.name == "ruff" then
+    -- let python-lsp-server handle hover actions instead
+    client.server_capabilities.hoverProvider = false
+  end
+  if client.name == "pylsp" then
+    -- let ruff handle formatting actions instead
+    client.server_capabilities.documentFormattingProvider = false
+  end
+
   -- Buffer mappings
   wk.add({
     { "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", desc = "Signature help" },

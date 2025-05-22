@@ -269,4 +269,5 @@ return {
       kitty_method = "normal",
     },
   },
+  "glindstedt/obazel.nvim",
 }
