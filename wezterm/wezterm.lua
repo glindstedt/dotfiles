@@ -1,5 +1,23 @@
 local wezterm = require("wezterm")
 
+-- https://github.com/wezterm/wezterm/issues/1742#issuecomment-1877401042
+local xcursor_size = nil
+local xcursor_theme = nil
+
+---@diagnostic disable-next-line: unused-local
+local success, stdout, _stderr =
+  wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-theme" })
+if success then
+  xcursor_theme = stdout:gsub("'(.+)'\n", "%1")
+end
+
+---@diagnostic disable-next-line: redefined-local,unused-local
+local success, stdout, _stderr =
+  wezterm.run_child_process({ "gsettings", "get", "org.gnome.desktop.interface", "cursor-size" })
+if success then
+  xcursor_size = tonumber(stdout)
+end
+
 local config = {}
 
 if wezterm.config_builder then
@@ -8,6 +26,9 @@ end
 
 -- config.color_scheme = "Tomorrow Night"
 config.color_scheme = "tokyonight_night"
+
+config.xcursor_theme = xcursor_theme
+config.xcursor_size = xcursor_size
 
 config.window_decorations = "RESIZE"
 
