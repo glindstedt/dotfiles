@@ -5,6 +5,7 @@ vim.filetype.add({
     as = "cpp",
     ron = "ron",
     river = "hcl",
+    bazelrc = "bazelrc",
 
     container = "systemd",
     network = "systemd",
